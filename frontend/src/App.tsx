@@ -38,7 +38,7 @@ function App() {
             }
           />
           {/* Default redirect */}
-          <Route path="/" element={<Navigate to="/homepage" />} />
+          <Route path="/" element={<Navigate to="/signup" />} />
         </Routes>
       </div>
     </Router>
