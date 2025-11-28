@@ -24,23 +24,41 @@ const Sidebar: React.FC<SidebarProps> = ({ onNewChat }) => {
   };
 
   return (
-    <div>
+    <div className="sidebar">
       <div className="logo">Palantir Lite</div>
 
       {/* New Chat Button */}
       <button className="new-chat-button" onClick={onNewChat}>
         + New Chat
       </button>
-      <Link to="/chats" className="nav-item">
-        My Chat
+      <Link to="/mychats" className="nav-item">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path
+            d="M17 9C17 12.866 13.866 16 10 16C9 16 8 15.8 7.2 15.4L3 17L4.6 12.8C4.2 12 4 11 4 10C4 6.134 7.134 3 11 3C14.866 3 17 6.134 17 9Z"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+        My Chats
       </Link>
       <Link to="/billing" className="nav-item">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path
+            d="M2 5C2 3.89543 2.89543 3 4 3H16C17.1046 3 18 3.89543 18 5V15C18 16.1046 17.1046 17 16 17H4C2.89543 17 2 16.1046 2 15V5Z"
+            stroke="currentColor"
+            strokeWidth="2"
+          />
+          <path d="M2 8H18" stroke="currentColor" strokeWidth="2" />
+        </svg>
         Billing
       </Link>
 
       {/* Bottom of nav bar toggles */}
       <div className="sidebar-footer">
         <button
+          className="footer-btn"
           onClick={toggleDarkMode}
           title={darkMode ? "Light mode" : "Dark mode"}
         >

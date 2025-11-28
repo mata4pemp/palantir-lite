@@ -8,6 +8,10 @@ import {
 import SignIn from "./Authentication/SignIn";
 import SignUp from "./Authentication/SignUp";
 import Homepage from "./Homepage/Homepage";
+import NewChat from "./NewChat/Newchat";
+import MyChats from "./MyChats/Mychats";
+import Billing from "./BillingPage/Billing";
+import Layout from "./Layout/Layout";
 
 //protected route component
 //cant access certain page as a logged in user, others cant
@@ -33,7 +37,39 @@ function App() {
             path="/homepage"
             element={
               <ProtectedRoute>
-                <Homepage />
+                <Layout>
+                  <Homepage />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/newchat"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <NewChat />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/mychats"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <MyChats />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/billing"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <Billing />
+                </Layout>
               </ProtectedRoute>
             }
           />
