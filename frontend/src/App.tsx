@@ -12,6 +12,8 @@ import NewChat from "./NewChat/Newchat";
 import MyChats from "./MyChats/Mychats";
 import Billing from "./BillingPage/Billing";
 import Layout from "./Layout/Layout";
+import { UsageProvider } from "./contexts/UsageContext";
+
 
 //protected route component
 //cant access certain page as a logged in user, others cant
@@ -26,58 +28,60 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 
 function App() {
   return (
-    <Router>
-      <div>
-        <Routes>
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
+    <UsageProvider>
+      <Router>
+        <div>
+          <Routes>
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/signup" element={<SignUp />} />
 
-          {/* // Protected Routes, shows homepage only when user logged in authenticated */}
-          <Route
-            path="/homepage"
-            element={
-              <ProtectedRoute>
-                <Layout>
-                  <Homepage />
-                </Layout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/newchat"
-            element={
-              <ProtectedRoute>
-                <Layout>
-                  <NewChat />
-                </Layout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/mychats"
-            element={
-              <ProtectedRoute>
-                <Layout>
-                  <MyChats />
-                </Layout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/billing"
-            element={
-              <ProtectedRoute>
-                <Layout>
-                  <Billing />
-                </Layout>
-              </ProtectedRoute>
-            }
-          />
-          {/* Default redirect */}
-          <Route path="/" element={<Navigate to="/signup" />} />
-        </Routes>
-      </div>
-    </Router>
+            {/* // Protected Routes, shows homepage only when user logged in authenticated */}
+            <Route
+              path="/homepage"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <Homepage />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/newchat"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <NewChat />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/mychats"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <MyChats />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/billing"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <Billing />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            {/* Default redirect */}
+            <Route path="/" element={<Navigate to="/signup" />} />
+          </Routes>
+        </div>
+      </Router>
+    </UsageProvider>
   );
 }
 

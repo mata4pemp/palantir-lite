@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "./Newchat.css";
+import { useUsage } from "../contexts/UsageContext";
+
 
 function NewChat() {
+    //track chat usage for usage meter
+    const { addChat, chatsUsed, chatsLimit } = useUsage();
+
   const [selectedType, setSelectedType] = useState<string>("Youtube Video");
   const [link, setLink] = useState<string>("");
   const [addedLinks, setAddedLinks] = useState<
@@ -34,8 +39,14 @@ function NewChat() {
 
   const handleSendMessage = () => {
     if (chatInput.trim()) {
+        //check if usage limit reached
+        if (chatsUsed >= chatsLimit){
+            alert('You have reached your chat limit! Please upgrade your plan')
+            return;
+        }
       setChatMessages([...chatMessages, { role: "user", content: chatInput }]);
       setChatInput("");
+      addChat(); // Track the chat usage
     }
   };
 

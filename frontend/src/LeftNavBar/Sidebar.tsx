@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Sidebar.css";
+import UsageBar from "../UsageBar/UsageBar";
+
 
 interface SidebarProps {
   onNewChat: () => void; //component receives a prop onnewchat
@@ -57,6 +59,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onNewChat }) => {
 
       {/* Bottom of nav bar toggles */}
       <div className="sidebar-footer">
+        <UsageBar />
         <button
           className="footer-btn"
           onClick={toggleDarkMode}
