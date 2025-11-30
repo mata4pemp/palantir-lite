@@ -12,6 +12,18 @@ function NewChat() {
     Array<{ role: string; content: string }>
   >([]);
   const [chatInput, setChatInput] = useState<string>("");
+  const [linkError, setLinkError] = useState<string>("");
+
+  //check if the input of the link is valid URL
+  const isValidURL = (urlString: string): boolean => {
+    if (!urlString.trim()) return false;
+    try {
+      const url = new URL(urlString);
+      return url.protocol === "http:" || url.protocol === "https:";
+    } catch {
+      return false;
+    }
+  };
 
   const handleSendMessage = () => {
     if (chatInput.trim()) {
@@ -21,10 +33,20 @@ function NewChat() {
   };
 
   const handleAdd = () => {
-    if (link.trim()) {
-      setAddedLinks([...addedLinks, { type: selectedType, url: link }]);
-      setLink(""); //clear input after adding
+    if (!link.trim()) {
+        setLinkError("Please enter a URL");
+        return;
     }
+
+    if(!isValidURL(link)){
+        setLinkError("This is not a valid URL, please insert a valid URL link")
+        return;
+    }
+
+    //if valid URL, clear error and add the link
+    setLinkError("");
+    setAddedLinks([...addedLinks, { type: selectedType, url: link }]);
+    setLink(""); //clear input after adding
   };
 
   return (
@@ -50,12 +72,25 @@ function NewChat() {
             type="url"
             placeholder="Place your link here"
             value={link}
-            onChange={(e) => setLink(e.target.value)}
+            onChange={(e) => {
+              setLink(e.target.value);
+              setLinkError("");
+            }}
             className="link-input"
           />
 
+          {/* Error message */}
+          {linkError && (
+            <div style={{ color: 'red', fontSize: '14px', marginTop: '8px', marginBottom: '8px' }}>
+              {linkError}
+            </div>
+          )}
+
           {/* Add Button */}
-          <button onClick={handleAdd} className="add-button">
+          <button
+            onClick={handleAdd}
+            className="add-button"
+          >
             Add
           </button>
         </div>
@@ -104,17 +139,29 @@ function NewChat() {
 
         {/* Chat Input Area */}
         <div className="chat-input-area">
-          <input
-            type="text"
+          <textarea
             placeholder="Message..."
             value={chatInput}
             onChange={(e) => setChatInput(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === "Enter") {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
                 handleSendMessage();
               }
             }}
             className="chat-input"
+            rows={1}
+            style={{
+              resize: 'none',
+              overflow: 'hidden',
+              minHeight: '40px',
+              maxHeight: '200px'
+            }}
+            onInput={(e) => {
+              const target = e.target as HTMLTextAreaElement;
+              target.style.height = 'auto';
+              target.style.height = target.scrollHeight + 'px';
+            }}
           />
           <button onClick={handleSendMessage} className="send-button">
             Send
