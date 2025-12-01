@@ -192,6 +192,36 @@ function NewChat() {
             className="link-input"
           />
 
+          {/* Warning for Google Docs/Sheets */}
+          {(selectedType === "Google Docs" || selectedType === "Google Sheets") && (
+            <div
+              style={{
+                color: "black",
+                fontSize: "13px",
+                marginTop: "8px",
+                marginBottom: "8px",
+                fontStyle: "italic",
+              }}
+            >
+              Please ensure your Google link is set to "Anyone with the link" → "Viewer" before adding it.
+            </div>
+          )}
+
+          {/* Warning for Notion Page */}
+          {selectedType === "Notion Page" && (
+            <div
+              style={{
+                color: "black",
+                fontSize: "13px",
+                marginTop: "8px",
+                marginBottom: "8px",
+                fontStyle: "italic",
+              }}
+            >
+              Make your Notion page public (Share → Share to web) before uploading.
+            </div>
+          )}
+
           {/* Error message */}
           {linkError && (
             <div
