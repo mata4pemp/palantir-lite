@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "./Newchat.css";
 import { useUsage } from "../contexts/UsageContext";
+import axios from "axios";
 
 
 function NewChat() {
-    //track chat usage for usage meter
-    const { addChat, chatsUsed, chatsLimit } = useUsage();
+  //track chat usage for usage meter
+  const { addChat, chatsUsed, chatsLimit } = useUsage();
 
   const [selectedType, setSelectedType] = useState<string>("Youtube Video");
   const [link, setLink] = useState<string>("");
@@ -18,6 +19,7 @@ function NewChat() {
   >([]);
   const [chatInput, setChatInput] = useState<string>("");
   const [linkError, setLinkError] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   //text popup for the custom text
   const [showTextPopup, setShowTextPopup] = useState<boolean>(false);
@@ -37,16 +39,39 @@ function NewChat() {
     }
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (chatInput.trim()) {
-        //check if usage limit reached
-        if (chatsUsed >= chatsLimit){
-            alert('You have reached your chat limit! Please upgrade your plan')
-            return;
-        }
-      setChatMessages([...chatMessages, { role: "user", content: chatInput }]);
+      //check if usage limit reached
+      if (chatsUsed >= chatsLimit) {
+        alert("You have reached your chat limit! Please upgrade your plan");
+        return;
+      }
+      const userMessage = { role: "user", content: chatInput };
+      setChatMessages([...chatMessages, userMessage]);
       setChatInput("");
       addChat(); // Track the chat usage
+      setIsLoading(true);
+
+      try {
+        const response = await axios.post('http://localhost:5000/api/chat',
+            {
+                messages: [...chatMessages, userMessage],
+                documents: addedLinks
+            },
+            {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            }
+        );
+
+        setChatMessages(prev => [...prev, response.data.message]);
+      } catch (error: any) {
+        console.error('Error:', error);
+        alert(error.response?.data?.error || 'Failed to get response from AI');
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -278,6 +303,11 @@ function NewChat() {
                 {message.content}
               </div>
             ))
+          )}
+          {isLoading && (
+            <div className="chat-message assistant">
+              <div className="typing-indicator">AI is thinking...</div>
+            </div>
           )}
         </div>
 
