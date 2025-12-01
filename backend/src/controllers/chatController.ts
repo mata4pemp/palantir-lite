@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import OpenAI from "openai";
+import Transcript from "../models/Transcript";
+import { extractVideoId } from "../services/youtubeService";
 
 //the structure of a chat message
 interface ChatMessage {
@@ -45,6 +47,30 @@ export const sendChatMessage = async (
     if (documents && documents.length > 0) {
       const docsList = documents.map((d) => `${d.type}: ${d.url}`).join(", ");
       systemMessage += ` You are currently chatting about these documents: ${docsList}`;
+
+      //fetch youtube video transcripts
+      const youtubeTranscripts: string[] = [];
+
+      for (const doc of documents) {
+        if (doc.type === "Youtube Video") {
+          const videoId = extractVideoId(doc.url);
+          if (videoId) {
+            const transcript = await Transcript.findOne({ videoId });
+            if (transcript) {
+              youtubeTranscripts.push(
+                `\n\n--- Transcript for ${doc.url} ---\n${transcript.transcript}\n--- End of Transcript ---\n`
+              );
+            }
+          }
+        }
+      }
+
+      //add all the youtube transcripts to system messa
+      if (youtubeTranscripts.length > 0) {
+        systemMessage +=
+          "\n\nHere are the transcripts of the YouTube videos:\n" +
+          youtubeTranscripts.join("\n");
+      }
     }
 
     //create the completion with OpenAI

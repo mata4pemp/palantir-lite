@@ -75,7 +75,7 @@ function NewChat() {
     }
   };
 
-  const handleAdd = () => {
+  const handleAdd = async () => {
     if (!link.trim()) {
       setLinkError("Please enter a URL");
       return;
@@ -84,6 +84,35 @@ function NewChat() {
     if (!isValidURL(link)) {
       setLinkError("This is not a valid URL, please insert a valid URL link");
       return;
+    }
+
+    //if its a YT video process it first
+    if (selectedType === "Youtube Video") {
+      setIsLoading(true);
+      try {
+        const response = await axios.post(
+          'http://localhost:5000/api/youtube/process',
+          { videoUrl: link },
+          {
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+          }
+        );
+
+        // Show success message
+        alert(response.data.cached
+          ? 'Video transcript loaded from cache!'
+          : 'Video processed successfully!');
+
+      } catch (error: any) {
+        console.error('Error processing video:', error);
+        setLinkError(error.response?.data?.error || 'Failed to process YouTube video');
+        setIsLoading(false);
+        return;
+      } finally {
+        setIsLoading(false);
+      }
     }
 
     //if valid URL, clear error and add the link

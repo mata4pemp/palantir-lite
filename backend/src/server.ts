@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import { connectDB } from "./config/db";
 import authRoutes from "./routes/authRoutes";
 import chatRoutes from "./routes/chatRoutes";
-
+import youtubeRoutes from "./routes/youtubeRoutes";
 
 dotenv.config();
 
@@ -21,7 +21,7 @@ connectDB();
 //routes
 app.use("/api/auth", authRoutes);
 app.use("/api", chatRoutes);
-
+app.use("/api/youtube", youtubeRoutes);
 
 app.get("/", (req, res) => {
   res.json({ message: "Document chat api is runnning" });
