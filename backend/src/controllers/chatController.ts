@@ -2,6 +2,16 @@ import { Request, Response } from "express";
 import OpenAI from "openai";
 import Transcript from "../models/Transcript";
 import { extractVideoId } from "../services/youtubeService";
+import {
+  extractGoogleDocId,
+  extractGoogleSheetId,
+  downloadGoogleDoc,
+  downloadGoogleSheet,
+} from "../services/googleDocsService";
+import {
+  extractNotionPageId,
+  downloadNotionPage,
+} from "../services/notionService";
 
 //the structure of a chat message
 interface ChatMessage {
@@ -65,11 +75,50 @@ export const sendChatMessage = async (
         }
       }
 
-      //add all the youtube transcripts to system messa
+      //add all the youtube transcripts to system message
       if (youtubeTranscripts.length > 0) {
         systemMessage +=
           "\n\nHere are the transcripts of the YouTube videos:\n" +
           youtubeTranscripts.join("\n");
+      }
+
+      //fetch the google docs content
+      for (const doc of documents) {
+        if (doc.type === "Google Docs") {
+          const docId = extractGoogleDocId(doc.url);
+          if (docId) {
+            try {
+              const content = await downloadGoogleDoc(docId);
+              systemMessage += `\n\n--- Content from Google Doc (${doc.url}) ---\n${content}\n--- End of Google Doc ---\n`;
+            } catch (error: any) {
+              console.error("Error fetching Google Doc:", error);
+            }
+          }
+        }
+
+        if (doc.type === "Google Sheets") {
+          const sheetId = extractGoogleSheetId(doc.url);
+          if (sheetId) {
+            try {
+              const content = await downloadGoogleSheet(sheetId);
+              systemMessage += `\n\n--- Content from Google Sheet (${doc.url}) ---\n${content}\n--- End of Google Sheet ---\n`;
+            } catch (error: any) {
+              console.error("Error fetching Google Sheet:", error);
+            }
+          }
+        }
+
+        if (doc.type === "Notion Page") {
+          const pageId = extractNotionPageId(doc.url);
+          if (pageId) {
+            try {
+              const content = await downloadNotionPage(doc.url);
+              systemMessage += `\n\n--- Content from Notion Page (${doc.url}) ---\n${content}\n--- End of Notion Page ---\n`;
+            } catch (error: any) {
+              console.error("Error fetching Notion Page:", error);
+            }
+          }
+        }
       }
     }
 
