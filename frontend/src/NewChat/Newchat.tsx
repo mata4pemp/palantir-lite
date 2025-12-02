@@ -53,7 +53,7 @@ function NewChat() {
       setIsLoading(true);
 
       try {
-        const response = await axios.post('http://localhost:5000/api/chat',
+        const response = await axios.post('http://localhost:5001/api/chat',
             {
                 messages: [...chatMessages, userMessage],
                 documents: addedLinks
@@ -91,7 +91,7 @@ function NewChat() {
       setIsLoading(true);
       try {
         const response = await axios.post(
-          'http://localhost:5000/api/youtube/process',
+          'http://localhost:5001/api/youtube/process',
           { videoUrl: link },
           {
             headers: {
