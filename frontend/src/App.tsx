@@ -47,7 +47,7 @@ function App() {
               }
             />
             <Route
-              path="/newchat"
+              path="/newchat/:chatId?"
               element={
                 <ProtectedRoute>
                   <Layout>

@@ -8,6 +8,8 @@ import authRoutes from "./routes/authRoutes";
 import chatRoutes from "./routes/chatRoutes";
 import youtubeRoutes from "./routes/youtubeRoutes";
 
+import chatHistoryRoutes from "./routes/chatHistoryRoutes";
+
 const app: Application = express();
 
 //middleware
@@ -22,6 +24,8 @@ connectDB();
 app.use("/api/auth", authRoutes);
 app.use("/api", chatRoutes);
 app.use("/api/youtube", youtubeRoutes);
+app.use("/api/chats", chatHistoryRoutes);
+
 
 app.get("/", (req, res) => {
   res.json({ message: "Document chat api is runnning" });

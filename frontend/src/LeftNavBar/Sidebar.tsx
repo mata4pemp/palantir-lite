@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import "./Sidebar.css";
 import UsageBar from "../UsageBar/UsageBar";
-
+import { useEffect } from "react"; // Add useEffect to the imports on line 1
+import axios from "axios";
 
 interface SidebarProps {
   onNewChat: () => void; //component receives a prop onnewchat
@@ -11,12 +12,76 @@ interface SidebarProps {
 //react function component expects props shaped like sidebarpropps
 const Sidebar: React.FC<SidebarProps> = ({ onNewChat }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [darkMode, setDarkMode] = useState<boolean>(false);
+  //chat history
+  const [chats, setChats] = useState<
+    Array<{ _id: string; name: string; updatedAt: string }>
+  >([]);
+  const [editingChatId, setEditingChatId] = useState<string | null>(null);
+  const [editingChatName, setEditingChatName] = useState<string>("");
 
   //able to turn on/off dark mode
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
     document.body.classList.toggle("dark-mode");
+  };
+
+  const fetchChats = async () => {
+    try {
+      const response = await axios.get("http://localhost:5001/api/chats", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      console.log("Fetched chats:", response.data.chats);
+      setChats(response.data.chats);
+    } catch (error) {
+      console.error("Error fetching chats:", error);
+    }
+  };
+
+useEffect(() => {
+  fetchChats();
+
+  // Also listen for manual refresh events
+  const handleChatUpdate = () => {
+    fetchChats();
+  };
+
+  window.addEventListener("chatUpdated", handleChatUpdate);
+
+  // Cleanup listener on unmount
+  return () => {
+    window.removeEventListener("chatUpdated", handleChatUpdate);
+  };
+}, [location.pathname]);
+
+  const handleEditChat = (chatId: string, currentName: string, e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent navigation
+    setEditingChatId(chatId);
+    setEditingChatName(currentName);
+  };
+
+  const handleSaveChatName = async (chatId: string) => {
+    if (!editingChatName.trim()) return;
+
+    try {
+      await axios.put(
+        `http://localhost:5001/api/chats/${chatId}/name`,
+        { name: editingChatName },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      setEditingChatId(null);
+      setEditingChatName("");
+      fetchChats(); // Refresh the list
+    } catch (error) {
+      console.error("Error updating chat name:", error);
+    }
   };
 
   const handleSignOut = () => {
@@ -56,6 +121,61 @@ const Sidebar: React.FC<SidebarProps> = ({ onNewChat }) => {
         </svg>
         Billing
       </Link>
+
+      {/* Chat history, see all your chats */}
+      <div className="chat-history">
+        <h3 className="chat-history-title">Recent Chats</h3>
+        <div className="chat-list">
+          {chats.map((chat) => (
+            <div key={chat._id} className="chat-list-item-wrapper">
+              {editingChatId === chat._id ? (
+                <input
+                  type="text"
+                  value={editingChatName}
+                  onChange={(e) => setEditingChatName(e.target.value)}
+                  onBlur={() => handleSaveChatName(chat._id)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleSaveChatName(chat._id);
+                    } else if (e.key === "Escape") {
+                      setEditingChatId(null);
+                      setEditingChatName("");
+                    }
+                  }}
+                  autoFocus
+                  className="chat-name-edit-input"
+                />
+              ) : (
+                <Link
+                  to={`/newchat/${chat._id}`}
+                  className="chat-list-item"
+                >
+                  <span className="chat-name">{chat.name}</span>
+                  <button
+                    className="edit-chat-button"
+                    onClick={(e) => handleEditChat(chat._id, chat.name, e)}
+                    title="Rename chat"
+                  >
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                  </button>
+                </Link>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
 
       {/* Bottom of nav bar toggles */}
       <div className="sidebar-footer">

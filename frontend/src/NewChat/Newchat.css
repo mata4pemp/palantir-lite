@@ -249,7 +249,8 @@
   justify-content: flex-end;
 }
 
-.save-button, .cancel-button {
+.save-button,
+.cancel-button {
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
   border: none;
@@ -324,4 +325,32 @@
 
 .delete-button svg {
   display: block;
+}
+
+.chat-name-header {
+  padding: 15px 20px;
+  border-bottom: 1px solid #e0e0e0;
+  background-color: #fff;
+}
+
+.chat-name-title {
+  margin: 0;
+  font-size: 20px;
+  cursor: pointer;
+  color: #333;
+  font-weight: 600;
+}
+
+.chat-name-title:hover {
+  color: #007bff;
+}
+
+.chat-name-input {
+  width: 100%;
+  font-size: 20px;
+  font-weight: 600;
+  border: 2px solid #007bff;
+  padding: 5px 10px;
+  border-radius: 4px;
+  outline: none;
 }

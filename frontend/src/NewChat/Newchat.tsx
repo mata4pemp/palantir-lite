@@ -2,9 +2,12 @@ import React, { useState, useEffect } from "react";
 import "./Newchat.css";
 import { useUsage } from "../contexts/UsageContext";
 import axios from "axios";
-
+import { useParams } from "react-router-dom"; // Add this to imports
 
 function NewChat() {
+    //allow chat switching in chat history sidebar
+  const { chatId } = useParams<{ chatId?: string }>();
+
   //track chat usage for usage meter
   const { addChat, chatsUsed, chatsLimit } = useUsage();
 
@@ -27,6 +30,11 @@ function NewChat() {
 
   // which text is being edited, null add new custom text, number edit an existing item at the index
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
+
+  //chat history states , save all the chats
+  const [currentChatId, setCurrentChatId] = useState<string | null>(null);
+  const [chatName, setChatName] = useState<string>("Untitled Chat"); //name of chat
+  const [isEditingName, setIsEditingName] = useState<boolean>(false); //whether the user is editing the chat name
 
   //check if the input of the link is valid URL
   const isValidURL = (urlString: string): boolean => {
@@ -52,23 +60,38 @@ function NewChat() {
       addChat(); // Track the chat usage
       setIsLoading(true);
 
+      if (!currentChatId) {
+        const newChatId = await createNewChat();
+        if (!newChatId) {
+          alert("Failed to create chat");
+          setIsLoading(false);
+          return;
+        }
+      }
+
+      // Save user message to database (after chat is created)
+      await addMessageToChat("user", chatInput);
+
       try {
-        const response = await axios.post('http://localhost:5001/api/chat',
-            {
-                messages: [...chatMessages, userMessage],
-                documents: addedLinks
+        const response = await axios.post(
+          "http://localhost:5001/api/chat",
+          {
+            messages: [...chatMessages, userMessage],
+            documents: addedLinks,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
-            {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                }
-            }
+          }
         );
 
-        setChatMessages(prev => [...prev, response.data.message]);
+        setChatMessages((prev) => [...prev, response.data.message]);
+        //save assitatn message to database
+        await addMessageToChat("assistant", response.data.message.content);
       } catch (error: any) {
-        console.error('Error:', error);
-        alert(error.response?.data?.error || 'Failed to get response from AI');
+        console.error("Error:", error);
+        alert(error.response?.data?.error || "Failed to get response from AI");
       } finally {
         setIsLoading(false);
       }
@@ -86,40 +109,132 @@ function NewChat() {
       return;
     }
 
-    //if its a YT video process it first
-    if (selectedType === "Youtube Video") {
-      setIsLoading(true);
-      try {
-        const response = await axios.post(
-          'http://localhost:5001/api/youtube/process',
-          { videoUrl: link },
-          {
-            headers: {
-              'Authorization': `Bearer ${localStorage.getItem('token')}`
-            }
-          }
-        );
-
-        // Show success message
-        alert(response.data.cached
-          ? 'Video transcript loaded from cache!'
-          : 'Video processed successfully!');
-
-      } catch (error: any) {
-        console.error('Error processing video:', error);
-        setLinkError(error.response?.data?.error || 'Failed to process YouTube video');
-        setIsLoading(false);
-        return;
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
     //if valid URL, clear error and add the link
     setLinkError("");
-    setAddedLinks([...addedLinks, { type: selectedType, url: link }]);
+    const newLinks = [...addedLinks, { type: selectedType, url: link }];
+    setAddedLinks(newLinks);
     setLink(""); //clear input after adding
+
+    // Create chat in database if this is the first document
+    if (!currentChatId) {
+      console.log("Creating new chat...");
+      const newChatId = await createNewChat();
+      console.log("Created chat with ID:", newChatId);
+      // After creating chat, update it with the new document
+      if (newChatId) {
+        try {
+          await axios.put(
+            `http://localhost:5001/api/chats/${newChatId}`,
+            { documents: newLinks },
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }
+          );
+          console.log("Updated chat documents");
+        } catch (error) {
+          console.error("Error updating chat documents:", error);
+        }
+      }
+      // Trigger sidebar refresh so new chat appears
+      console.log("Triggering sidebar refresh");
+      window.dispatchEvent(new Event("chatUpdated"));
+    }
   };
+
+  const createNewChat = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5001/api/chats",
+        {
+          name: chatName,
+          documents: addedLinks,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      setCurrentChatId(response.data.chat._id);
+      return response.data.chat._id;
+    } catch (error) {
+      console.error("Error creating chat:", error);
+      return null;
+    }
+  };
+
+  //create function to update chat name
+  const updateChatName = async (newName: string) => {
+    if (!currentChatId) return;
+
+    try {
+      await axios.put(
+        `http://localhost:5001/api/chats/${currentChatId}/name`,
+        { name: newName },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      setChatName(newName);
+      // Trigger a navigation event to force sidebar refresh
+      window.dispatchEvent(new Event("chatUpdated"));
+    } catch (error) {
+      console.error("Error updating chat name:", error);
+    }
+  };
+
+  //function to add message to chat
+  const addMessageToChat = async (role: string, content: string) => {
+    if (!currentChatId) return;
+
+    try {
+      await axios.post(
+        `http://localhost:5001/api/chats/${currentChatId}/messages`,
+        { role, content },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+    } catch (error) {
+      console.error("Error adding message:", error);
+    }
+  };
+
+  const loadChat = async (id: string) => {
+    try {
+      const response = await axios.get(`http://localhost:5001/api/chats/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      const chat = response.data.chat;
+      setCurrentChatId(chat._id);
+      setChatName(chat.name);
+      setAddedLinks(chat.documents);
+      setChatMessages(
+        chat.messages.map((msg: any) => ({
+          role: msg.role,
+          content: msg.content,
+        }))
+      );
+    } catch (error) {
+      console.error("Error loading chat:", error);
+    }
+  };
+
+useEffect(() => {
+  if (chatId) {
+    loadChat(chatId);
+  }
+}, [chatId]);
 
   const handleSaveCustomText = () => {
     if (customText.trim()) {
@@ -193,7 +308,8 @@ function NewChat() {
           />
 
           {/* Warning for Google Docs/Sheets */}
-          {(selectedType === "Google Docs" || selectedType === "Google Sheets") && (
+          {(selectedType === "Google Docs" ||
+            selectedType === "Google Sheets") && (
             <div
               style={{
                 color: "black",
@@ -203,7 +319,8 @@ function NewChat() {
                 fontStyle: "italic",
               }}
             >
-              Please ensure your Google link is set to "Anyone with the link" → "Viewer" before adding it.
+              Please ensure your Google link is set to "Anyone with the link" →
+              "Viewer" before adding it.
             </div>
           )}
 
@@ -218,7 +335,8 @@ function NewChat() {
                 fontStyle: "italic",
               }}
             >
-              Make your Notion page public (Share → Share to web) before uploading.
+              Make your Notion page public (Share → Share to web) before
+              uploading.
             </div>
           )}
 
@@ -350,6 +468,36 @@ function NewChat() {
 
       {/* Right Panel - Chat Interface */}
       <div className="right-panel">
+        {/* Chat name header */}
+        <div className="chat-name-header">
+          {isEditingName ? (
+            <input
+              type="text"
+              value={chatName}
+              onChange={(e) => setChatName(e.target.value)}
+              onBlur={() => {
+                setIsEditingName(false);
+                updateChatName(chatName);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  setIsEditingName(false);
+                  updateChatName(chatName);
+                }
+              }}
+              autoFocus
+              className="chat-name-input"
+            />
+          ) : (
+            <h2
+              onClick={() => setIsEditingName(true)}
+              className="chat-name-title"
+            >
+              {chatName}
+            </h2>
+          )}
+        </div>
+
         {/* Chat Messages Area */}
         <div className="chat-messages">
           {chatMessages.length === 0 ? (
