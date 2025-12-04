@@ -11,6 +11,7 @@ import Homepage from "./Homepage/Homepage";
 import NewChat from "./NewChat/Newchat";
 import MyChats from "./MyChats/Mychats";
 import Billing from "./BillingPage/Billing";
+import Feedback from "./Feedback/Feedback";
 import Layout from "./Layout/Layout";
 import { UsageProvider } from "./contexts/UsageContext";
 
@@ -72,6 +73,16 @@ function App() {
                 <ProtectedRoute>
                   <Layout>
                     <Billing />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/feedback"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <Feedback />
                   </Layout>
                 </ProtectedRoute>
               }

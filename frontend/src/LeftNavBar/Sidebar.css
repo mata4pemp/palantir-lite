@@ -1,5 +1,8 @@
 /* Sidebar container - fixed to left */
 .sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
   width: 260px;
   height: 100vh;
   background-color: #1e293b;
@@ -119,8 +122,20 @@
   flex: 1;
 }
 
-.edit-chat-button {
+.chat-actions {
   display: none;
+  gap: 0.25rem;
+  align-items: center;
+  flex-shrink: 0;
+  margin-left: 0.5rem;
+}
+
+.chat-list-item:hover .chat-actions {
+  display: flex;
+}
+
+.edit-chat-button,
+.delete-chat-button {
   background: transparent;
   border: none;
   color: #9ca3af;
@@ -128,8 +143,6 @@
   padding: 0.25rem;
   border-radius: 4px;
   transition: all 0.2s;
-  flex-shrink: 0;
-  margin-left: 0.5rem;
 }
 
 .edit-chat-button:hover {
@@ -137,8 +150,9 @@
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-.chat-list-item:hover .edit-chat-button {
-  display: block;
+.delete-chat-button:hover {
+  color: #ef4444;
+  background-color: rgba(239, 68, 68, 0.1);
 }
 
 .chat-name-edit-input {

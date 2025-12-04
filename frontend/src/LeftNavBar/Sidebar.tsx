@@ -84,6 +84,33 @@ useEffect(() => {
     }
   };
 
+  const handleDeleteChat = async (chatId: string, e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent navigation
+
+    if (!window.confirm("Are you sure you want to delete this chat?")) {
+      return;
+    }
+
+    try {
+      await axios.delete(
+        `http://localhost:5001/api/chats/${chatId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      fetchChats(); // Refresh the list
+      // If we're currently viewing this chat, redirect to new chat
+      if (location.pathname.includes(chatId)) {
+        navigate("/newchat");
+      }
+    } catch (error) {
+      console.error("Error deleting chat:", error);
+      alert("Failed to delete chat");
+    }
+  };
+
   const handleSignOut = () => {
     localStorage.removeItem("token");
     //redirect to sign in after signout
@@ -121,6 +148,25 @@ useEffect(() => {
         </svg>
         Billing
       </Link>
+      <Link to="/feedback" className="nav-item">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path
+            d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 11.8 2.6 13.4 3.6 14.7L2.3 17.7C2.1 18.1 2.5 18.5 2.9 18.3L5.9 17C7.2 17.6 8.6 18 10 18Z"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M7 9H7.01M10 9H10.01M13 9H13.01"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+        Feedback
+      </Link>
 
       {/* Chat history, see all your chats */}
       <div className="chat-history">
@@ -151,25 +197,48 @@ useEffect(() => {
                   className="chat-list-item"
                 >
                   <span className="chat-name">{chat.name}</span>
-                  <button
-                    className="edit-chat-button"
-                    onClick={(e) => handleEditChat(chat._id, chat.name, e)}
-                    title="Rename chat"
-                  >
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
+                  <div className="chat-actions">
+                    <button
+                      className="edit-chat-button"
+                      onClick={(e) => handleEditChat(chat._id, chat.name, e)}
+                      title="Rename chat"
                     >
-                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                    </svg>
-                  </button>
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                      </svg>
+                    </button>
+                    <button
+                      className="delete-chat-button"
+                      onClick={(e) => handleDeleteChat(chat._id, e)}
+                      title="Delete chat"
+                    >
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        <line x1="10" y1="11" x2="10" y2="17"></line>
+                        <line x1="14" y1="11" x2="14" y2="17"></line>
+                      </svg>
+                    </button>
+                  </div>
                 </Link>
               )}
             </div>

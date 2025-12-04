@@ -140,6 +140,22 @@ function NewChat() {
       // Trigger sidebar refresh so new chat appears
       console.log("Triggering sidebar refresh");
       window.dispatchEvent(new Event("chatUpdated"));
+    } else {
+      // Chat already exists, update its documents in the database
+      try {
+        await axios.put(
+          `http://localhost:5001/api/chats/${currentChatId}`,
+          { documents: newLinks },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        console.log("Updated existing chat documents");
+      } catch (error) {
+        console.error("Error updating existing chat documents:", error);
+      }
     }
   };
 
@@ -233,6 +249,12 @@ function NewChat() {
 useEffect(() => {
   if (chatId) {
     loadChat(chatId);
+  } else {
+    // Reset to fresh state when no chatId (new chat)
+    setCurrentChatId(null);
+    setChatName("Untitled Chat");
+    setAddedLinks([]);
+    setChatMessages([]);
   }
 }, [chatId]);
 
