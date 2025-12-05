@@ -10,7 +10,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const navigate = useNavigate();
 
   const handleNewChat = () => {
+    // Navigate to /newchat without chatId
     navigate("/newchat");
+
+    // Dispatch a custom event to reset the chat state
+    // This ensures the NewChat component resets even if already on /newchat
+    window.dispatchEvent(new CustomEvent("resetChat"));
   };
 
   return (

@@ -14,7 +14,7 @@ function NewChat() {
   const [selectedType, setSelectedType] = useState<string>("Youtube Video");
   const [link, setLink] = useState<string>("");
   const [addedLinks, setAddedLinks] = useState<
-    Array<{ type: string; url: string }>
+    Array<{ type: string; url: string; title?: string }>
   >([]);
 
   const [chatMessages, setChatMessages] = useState<
@@ -23,6 +23,8 @@ function NewChat() {
   const [chatInput, setChatInput] = useState<string>("");
   const [linkError, setLinkError] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+const [transcriptionStatus, setTranscriptionStatus] = useState<string>("");
+
 
   //text popup for the custom text
   const [showTextPopup, setShowTextPopup] = useState<boolean>(false);
@@ -111,7 +113,93 @@ function NewChat() {
 
     //if valid URL, clear error and add the link
     setLinkError("");
-    const newLinks = [...addedLinks, { type: selectedType, url: link }];
+
+// if its a youtube video, process it first to get the transcript
+let documentTitle: string | undefined;
+if (selectedType === "Youtube Video") {
+  console.log("Processing Youtube video:", link);
+  try {
+    setIsLoading(true);
+    setTranscriptionStatus(
+      "Downloading and transcribing video... This may take a minute."
+    );
+
+    const response = await axios.post(
+      "http://localhost:5001/api/youtube/process",
+      { videoUrl: link },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+
+    console.log("Youtube transcript processed:", response.data);
+    documentTitle = response.data.title; // Store the title
+    setTranscriptionStatus("✅ Transcription successful!");
+
+    // Clear success message after 3 seconds
+    setTimeout(() => setTranscriptionStatus(""), 3000);
+
+    setIsLoading(false);
+  } catch (error: any) {
+    console.error("Error processing Youtube video", error);
+    setIsLoading(false);
+    setTranscriptionStatus("");
+    alert(error.response?.data?.error || "Failed to process Youtube video");
+    return; //stop if transcription fails
+  }
+}
+
+// if its a Google Doc or Google Sheet, fetch the title
+if (selectedType === "Google Docs" || selectedType === "Google Sheets") {
+  try {
+    setIsLoading(true);
+    setTranscriptionStatus(`Fetching ${selectedType} information...`);
+
+    // Extract the document/sheet ID from the URL
+    const idMatch = link.match(/\/(document|spreadsheets)\/d\/([a-zA-Z0-9-_]+)/);
+    if (!idMatch) {
+      throw new Error("Invalid Google Docs/Sheets URL");
+    }
+    const docId = idMatch[2];
+
+    // Call backend API to get the title
+    const endpoint = selectedType === "Google Docs"
+      ? `http://localhost:5001/api/google/doc/${docId}`
+      : `http://localhost:5001/api/google/sheet/${docId}`;
+
+    const response = await axios.get(endpoint, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+
+    documentTitle = response.data.title;
+
+    setTranscriptionStatus("✅ Document info fetched!");
+
+    // Clear success message after 3 seconds
+    setTimeout(() => setTranscriptionStatus(""), 3000);
+
+    setIsLoading(false);
+  } catch (error: any) {
+    console.error(`Error fetching ${selectedType} info:`, error);
+    setIsLoading(false);
+    setTranscriptionStatus("");
+    // Don't block adding the document if title fetch fails
+    documentTitle = undefined;
+  }
+}
+
+    const newLinks = [
+      ...addedLinks,
+      {
+        type: selectedType,
+        url: link,
+        title: documentTitle,
+      },
+    ];
     setAddedLinks(newLinks);
     setLink(""); //clear input after adding
 
@@ -297,6 +385,34 @@ useEffect(() => {
     }
   }, [selectedType]);
 
+  // Listen for resetChat event from the New Chat button
+  useEffect(() => {
+    const handleResetChat = () => {
+      // Reset all state to initial values
+      setCurrentChatId(null);
+      setChatName("Untitled Chat");
+      setAddedLinks([]);
+      setChatMessages([]);
+      setLink("");
+      setChatInput("");
+      setLinkError("");
+      setIsLoading(false);
+      setTranscriptionStatus("");
+      setShowTextPopup(false);
+      setCustomText("");
+      setEditingIndex(null);
+      setIsEditingName(false);
+      setSelectedType("Youtube Video");
+    };
+
+    window.addEventListener("resetChat", handleResetChat);
+
+    // Cleanup listener on unmount
+    return () => {
+      window.removeEventListener("resetChat", handleResetChat);
+    };
+  }, []);
+
   return (
     <div className="newchat-container">
       {/* Left Panel - Document Upload */}
@@ -377,9 +493,20 @@ useEffect(() => {
           )}
 
           {/* Add Button */}
-          <button onClick={handleAdd} className="add-button">
-            Add
-          </button>
+          <button 
+  onClick={handleAdd} 
+  className="add-button"
+  disabled={isLoading}
+>
+  {isLoading ? "Processing..." : "Add"}
+</button>
+
+          {/* Transcription Status Message */}
+          {transcriptionStatus && (
+            <div className="transcription-status">
+              {transcriptionStatus}
+            </div>
+          )}
         </div>
 
         {/* Display the added links as components, which documents did users add? */}
@@ -394,14 +521,23 @@ useEffect(() => {
                     {item.type === "Custom Text" ? (
                       <span className="document-link">{item.url}</span>
                     ) : (
-                      <a
-                        href={item.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="document-link"
-                      >
-                        {item.url}
-                      </a>
+                      <>
+                        <a
+                          href={item.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="document-link"
+                        >
+                          {item.url}
+                        </a>
+                        {item.title && (
+                          <div style={{ marginTop: "0.5rem", fontSize: "0.9rem", color: "#666" }}>
+                            {item.type === "Youtube Video" && `Video Name: ${item.title}`}
+                            {item.type === "Google Docs" && `Document Name: ${item.title}`}
+                            {item.type === "Google Sheets" && `Sheet Name: ${item.title}`}
+                          </div>
+                        )}
+                      </>
                     )}
                   </div>
                   <div className="document-actions">

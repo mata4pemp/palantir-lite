@@ -33,20 +33,12 @@ function App() {
       <Router>
         <div>
           <Routes>
+            {/* Public routes - no authentication required */}
+            <Route path="/" element={<Homepage />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
 
-            {/* // Protected Routes, shows homepage only when user logged in authenticated */}
-            <Route
-              path="/homepage"
-              element={
-                <ProtectedRoute>
-                  <Layout>
-                    <Homepage />
-                  </Layout>
-                </ProtectedRoute>
-              }
-            />
+            {/* Protected Routes - requires authentication */}
             <Route
               path="/newchat/:chatId?"
               element={
@@ -87,8 +79,6 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            {/* Default redirect */}
-            <Route path="/" element={<Navigate to="/signup" />} />
           </Routes>
         </div>
       </Router>

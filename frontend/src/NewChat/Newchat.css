@@ -75,12 +75,25 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1rem;
+}
+
+/* Document content wrapper - constrains text width */
+.document-item > div:first-child {
+  flex: 1;
+  min-width: 0; /* Important: allows flex item to shrink below content size */
+  overflow: hidden;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 /* Document link styling */
 .document-link {
   color: #667eea;
   text-decoration: none;
+  word-break: break-all; /* Break long URLs */
+  display: inline-block;
+  max-width: 100%;
 }
 
 .document-link:hover {
@@ -353,4 +366,23 @@
   padding: 5px 10px;
   border-radius: 4px;
   outline: none;
+}
+
+/* Transcription Status Message */
+.transcription-status {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  background-color: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: 6px;
+  color: #0369a1;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+/* Disabled Add Button */
+.add-button:disabled {
+  background-color: #cbd5e1;
+  cursor: not-allowed;
+  opacity: 0.6;
 }

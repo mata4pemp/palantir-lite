@@ -1,12 +1,16 @@
-import ytdl from "ytdl-core";
-import FormData from "form-data";
 import OpenAI from "openai";
-import { Readable } from "stream";
+import ytdl from "@distube/ytdl-core";
+import { exec } from "child_process";
+import { promisify } from "util";
+import fs from "fs";
+import path from "path";
 //data structure that lets you receive data in small chunks overtime instead of loading it all at once
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
+
+const execAsync = promisify(exec);
 
 //extract videoID from youtube URL
 export const extractVideoId = (url: string): string | null => {
@@ -34,64 +38,76 @@ export const extractVideoId = (url: string): string | null => {
 };
 
 //Download the audio from YT video
+//Download the audio from YT video using yt-dlp
 export const downloadYoutubeAudio = async (
   videoUrl: string
-): Promise<{ audioStream: Readable; duration: number }> => {
+): Promise<{ audioPath: string; duration: number; title: string }> => {
   try {
-    //get video info to check duration
+    // Get video info to extract title and check duration
     const info = await ytdl.getInfo(videoUrl);
     const duration = parseInt(info.videoDetails.lengthSeconds);
+    const title = info.videoDetails.title;
 
-    //limit to 2+ hours to prevent abuse of whisper
+    // Check duration limit (2 hours = 7200 seconds)
     if (duration > 7200) {
       throw new Error("Video is too long. Max duration of video is 2 hours.");
     }
 
-    //Download the audio only
-    const audioStream = ytdl(videoUrl, {
-      quality: "lowestaudio", //smallest file size possible
-      filter: "audioonly",
-    });
+    // Create temp directory to store downloaded audio if it doesn't exist
+    const tempDir = path.join(__dirname, "../../temp");
+    if (!fs.existsSync(tempDir)) {
+      fs.mkdirSync(tempDir, { recursive: true });
+    }
 
-    return { audioStream, duration };
+    // Generate unique filename with timestamp
+    const timestamp = Date.now();
+    const audioPath = path.join(tempDir, `audio_${timestamp}.m4a`);
+
+    // Download audio using yt-dlp
+    const downloadCmd = `yt-dlp -f "bestaudio[ext=m4a]" -o "${audioPath}" "${videoUrl}"`;
+    await execAsync(downloadCmd);
+
+    return { audioPath, duration, title };
   } catch (error: any) {
     console.error("Error downloading Youtube audio:", error);
-    throw new Error(`Failed to download audio:${error.message}`);
+    throw new Error(`Failed to download audio: ${error.message}`);
   }
 };
 
 //transcribe the audio file using Whisper API
 export const transcribeAudio = async (
-  audioStream: Readable,
+  audioPath: string,
   videoId: string
 ): Promise<string> => {
   try {
-    //Create form data for whisper API
-    const formData = new FormData();
+    // Read the audio file
+    const buffer = fs.readFileSync(audioPath);
 
-    //add audio stream to form data
-    //name with .m4a extension
-    formData.append("file", audioStream, {
-      filename: `${videoId}.m4a`,
-      contentType: "audio/mp4",
+    // Create a File object from the buffer
+    const file = new File([buffer], `${videoId}.m4a`, {
+      type: "audio/mp4",
     });
 
-    formData.append("model", "whisper-1");
-    //append english to tell whisper assume video is in english, so it produces more accurate resutl, process faster,  i can change it to make it dynamicaly detect language too
-    formData.append("language", "en");
-    formData.append("response_format", "text");
-
-    //call Whisper API
+    // Call Whisper API
     const response = await openai.audio.transcriptions.create({
-      file: audioStream as any,
+      file: file,
       model: "whisper-1",
       language: "en",
       response_format: "text",
     });
 
+    // Clean up: delete the temp audio file
+    fs.unlinkSync(audioPath);
+
     return response as unknown as string;
   } catch (error: any) {
     console.error("Error transcribing audio:", error);
+
+    // Clean up temp file even if transcription fails
+    if (fs.existsSync(audioPath)) {
+      fs.unlinkSync(audioPath);
+    }
+
     throw new Error(`Failed to transcribe audio: ${error.message}`);
   }
 };

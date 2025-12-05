@@ -88,8 +88,8 @@ export const sendChatMessage = async (
           const docId = extractGoogleDocId(doc.url);
           if (docId) {
             try {
-              const content = await downloadGoogleDoc(docId);
-              systemMessage += `\n\n--- Content from Google Doc (${doc.url}) ---\n${content}\n--- End of Google Doc ---\n`;
+              const { content, title } = await downloadGoogleDoc(docId);
+              systemMessage += `\n\n--- Content from Google Doc "${title}" (${doc.url}) ---\n${content}\n--- End of Google Doc ---\n`;
             } catch (error: any) {
               console.error("Error fetching Google Doc:", error);
             }
@@ -100,8 +100,8 @@ export const sendChatMessage = async (
           const sheetId = extractGoogleSheetId(doc.url);
           if (sheetId) {
             try {
-              const content = await downloadGoogleSheet(sheetId);
-              systemMessage += `\n\n--- Content from Google Sheet (${doc.url}) ---\n${content}\n--- End of Google Sheet ---\n`;
+              const { content, title } = await downloadGoogleSheet(sheetId);
+              systemMessage += `\n\n--- Content from Google Sheet "${title}" (${doc.url}) ---\n${content}\n--- End of Google Sheet ---\n`;
             } catch (error: any) {
               console.error("Error fetching Google Sheet:", error);
             }

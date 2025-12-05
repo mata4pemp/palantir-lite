@@ -7,7 +7,7 @@ import { connectDB } from "./config/db";
 import authRoutes from "./routes/authRoutes";
 import chatRoutes from "./routes/chatRoutes";
 import youtubeRoutes from "./routes/youtubeRoutes";
-
+import googleDocsRoutes from "./routes/googleDocsRoutes";
 import chatHistoryRoutes from "./routes/chatHistoryRoutes";
 
 const app: Application = express();
@@ -24,6 +24,7 @@ connectDB();
 app.use("/api/auth", authRoutes);
 app.use("/api", chatRoutes);
 app.use("/api/youtube", youtubeRoutes);
+app.use("/api/google", googleDocsRoutes);
 app.use("/api/chats", chatHistoryRoutes);
 
 

@@ -5,6 +5,7 @@ export interface ITranscript extends Document {
   videoUrl: string;
   transcript: string;
   duration: number;
+  title: string;
   language: string;
   userId: mongoose.Types.ObjectId;
   createdAt: Date;
@@ -40,6 +41,10 @@ const TranscriptSchema = new Schema<ITranscript>(
       ref: "User",
       required: true,
     },
+    title: {
+        type:String,
+        required: true,
+    }
   },
   {
     timestamps: true,

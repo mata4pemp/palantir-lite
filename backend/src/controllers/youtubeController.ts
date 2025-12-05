@@ -45,10 +45,10 @@ export const processYoutubeVideo = async (
     }
 
     //Download audio from Youtube
-    const { audioStream, duration } = await downloadYoutubeAudio(videoUrl);
+    const { audioPath, duration, title } = await downloadYoutubeAudio(videoUrl);
 
     //transcrube using Whisper
-    const transcript = await transcribeAudio(audioStream, videoId);
+    const transcript = await transcribeAudio(audioPath, videoId);
 
     //save transcript to database
     const newTranscript = await Transcript.create({
@@ -56,6 +56,7 @@ export const processYoutubeVideo = async (
       videoUrl,
       transcript,
       duration,
+      title,
       userId,
     });
 
@@ -64,6 +65,7 @@ export const processYoutubeVideo = async (
       transcript: newTranscript.transcript,
       videoId: newTranscript.videoId,
       duration: newTranscript.duration,
+      title: newTranscript.title,
       cached: false,
     });
   } catch (error: any) {
