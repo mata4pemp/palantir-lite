@@ -1,15 +1,51 @@
-App Overview
-Bitcoin Tracker App is a simple React application that allows users to view Bitcoin metrics (price, market cap, 24h change) and add coins to a watchlist.
-
-Key features: • Fetches live Bitcoin data from a public API • Allows users to add coins to a watchlist • Demonstrates lifted state and prop passing between components • Basic routing between pages
+Palantir Lite
 
 App Overview
-Bitcoin Tracker App is a simple React application that allows users to view Bitcoin metrics (price, market cap, 24h change) and add coins to a watchlist.
 
-Key features: • Fetches live Bitcoin data from a public API • Allows users to add coins to a watchlist • Demonstrates lifted state and prop passing between components • Basic routing between pages
+Palantir Lite is a React + Node.js application that allows users to upload documents (PDFs, Google Docs, Google Sheets, Notion pages) and interact with an AI assistant to extract, summarize, and answer questions based on the uploaded content. Users can also transcribe YouTube audio to text using OpenAI’s Whisper API.
+
+Here's the link to access:
+
+--------------------
+
+Screenshots
+
+Sign in Page
+![Palantir Lite Screenshot](assets/signin.png)
+
+New Chat Page
+![Palantir Lite Screenshot](assets/newchat.png)
+
+Feedback Page
+![Palantir Lite Screenshot](assets/feedback.png)
+
+Billing page
+![Palantir Lite Screenshot](assets/billing.png)
+
+-----------------
+API Endpoints
+
+Auth Routes
+
+API Routes
+
+------------
+Tech stacks
+MERN Stack - MongoDB, Express, React, Node.js
+
+--------------
+
+Key features:
+	•	Upload and manage multiple document types (PDF, Google Docs/Sheets, Notion).
+	•	Chat with AI based on uploaded documents.
+	•	Transcribe YouTube videos to text.
+	•	JWT-based authentication for secure user access.
+	•	Save chat histories with associated documents in MongoDB.
+	•	Simple, intuitive React frontend with Express backend.
 
 Next Steps / Improvements
-	•	Add authentication for connected platforms
-	•	Enable real-time updates for Google Docs/Sheets changes
-	•	Integrate AI-powered summarization for retrieved content
-	•	Improve UI/UX for easier multi-platform navigation
+	•	Add subscription and billing integration via Stripe.
+	•	Enable real-time updates for Google Docs/Sheets and Notion pages.
+	•	Integrate AI-powered summarization and enhanced search capabilities.
+	•	Improve UI/UX for smoother multi-platform navigation.
+	•	Implement role-based access control and enhanced security for sensitive documents.
