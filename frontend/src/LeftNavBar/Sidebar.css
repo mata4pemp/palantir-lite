@@ -70,8 +70,13 @@
 }
 
 .chat-history {
+  flex: 1; /* Take up available space */
+  min-height: 0; /* Important: allows flex item to shrink below content size */
   margin: 1rem 0;
   padding: 0 0.5rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Prevent expanding beyond available space */
 }
 
 .chat-history-title {
@@ -81,14 +86,16 @@
   color: #9ca3af;
   margin-bottom: 0.5rem;
   padding: 0 0.5rem;
+  flex-shrink: 0; /* Don't shrink the title */
 }
 
 .chat-list {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  max-height: 200px;
-  overflow-y: auto;
+  flex: 1; /* Take remaining space in chat-history */
+  overflow-y: auto; /* Scroll when content exceeds available space */
+  min-height: 0; /* Important: allows scrolling to work properly */
 }
 
 .chat-list-item-wrapper {

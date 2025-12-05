@@ -8,6 +8,7 @@ import authRoutes from "./routes/authRoutes";
 import chatRoutes from "./routes/chatRoutes";
 import youtubeRoutes from "./routes/youtubeRoutes";
 import googleDocsRoutes from "./routes/googleDocsRoutes";
+import notionRoutes from "./routes/notionRoutes";
 import chatHistoryRoutes from "./routes/chatHistoryRoutes";
 
 const app: Application = express();
@@ -25,6 +26,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api", chatRoutes);
 app.use("/api/youtube", youtubeRoutes);
 app.use("/api/google", googleDocsRoutes);
+app.use("/api/notion", notionRoutes);
 app.use("/api/chats", chatHistoryRoutes);
 
 

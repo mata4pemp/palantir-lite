@@ -19,8 +19,37 @@ export const extractNotionPageId = (url: string): string | null => {
 };
 
 //download and parse notion page content
-export const downloadNotionPage = async (pageUrl: string): Promise<string> => {
+export const downloadNotionPage = async (pageUrl: string): Promise<{ content: string; title: string }> => {
   try {
+    // Extract title from the URL slug first (most reliable method)
+    // Notion URLs format: https://www.notion.so/Page-Title-abc123def456
+    let title = "Untitled Page";
+
+    try {
+      const urlPath = new URL(pageUrl).pathname;
+      // Extract the slug part before the page ID
+      // Format: /Page-Title-With-Dashes-pageId or /workspace/Page-Title-pageId
+      const slugMatch = urlPath.match(/\/(?:.*?\/)?(.*?)-[a-f0-9]{32}|\/(?:.*?\/)?(.*?)-[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/);
+
+      if (slugMatch) {
+        const slug = slugMatch[1] || slugMatch[2];
+        if (slug) {
+          // Convert URL slug to readable title
+          // Replace hyphens with spaces and decode URL encoding
+          title = decodeURIComponent(slug)
+            .replace(/-/g, ' ')
+            .trim();
+
+          // Capitalize first letter of each word for better presentation
+          title = title.replace(/\b\w/g, (char) => char.toUpperCase());
+        }
+      }
+    } catch (urlError) {
+      console.log('Could not extract title from URL, will try HTML:', urlError);
+    }
+
+    console.log('Extracted title from URL slug:', title);
+
     //fetch the HTML from notion page
     const response = await axios.get(pageUrl, {
       headers: {
@@ -30,6 +59,29 @@ export const downloadNotionPage = async (pageUrl: string): Promise<string> => {
 
     //parse HTML with cheerio
     const $ = cheerio.load(response.data);
+
+    // Only try HTML extraction if URL extraction failed
+    if (title === "Untitled Page") {
+      // Method 1: Look for og:title meta tag
+      const ogTitle = $('meta[property="og:title"]').attr('content');
+      if (ogTitle && ogTitle !== 'The AI workspace that works for you. | Notion' && !ogTitle.includes('Notion')) {
+        title = ogTitle;
+      } else {
+        // Method 2: Look for the page title in the HTML title tag
+        const htmlTitle = $('title').text();
+        if (htmlTitle && htmlTitle !== 'Notion') {
+          title = htmlTitle;
+        } else {
+          // Method 3: Try to get the first h1 heading
+          const h1Title = $('h1').first().text().trim();
+          if (h1Title) {
+            title = h1Title;
+          }
+        }
+      }
+    }
+
+    console.log('Final Notion page title:', title);
 
     //remove script tags, style and nav elemtns
     $('script').remove();
@@ -52,7 +104,7 @@ export const downloadNotionPage = async (pageUrl: string): Promise<string> => {
       throw new Error('Could not extract content from Notion page. Make sure the page is public.');
     }
 
-    return cleanedContent;
+    return { content: cleanedContent, title };
   } catch (error: any) {
     console.error('Error downloading Notion page:', error);
     throw new Error(

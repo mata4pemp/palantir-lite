@@ -192,6 +192,39 @@ if (selectedType === "Google Docs" || selectedType === "Google Sheets") {
   }
 }
 
+// if its a Notion Page, fetch the title
+if (selectedType === "Notion Page") {
+  try {
+    setIsLoading(true);
+    setTranscriptionStatus("Fetching Notion page information...");
+
+    const response = await axios.post(
+      "http://localhost:5001/api/notion/page/title",
+      { pageUrl: link },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+
+    documentTitle = response.data.title;
+
+    setTranscriptionStatus("✅ Page info fetched!");
+
+    // Clear success message after 3 seconds
+    setTimeout(() => setTranscriptionStatus(""), 3000);
+
+    setIsLoading(false);
+  } catch (error: any) {
+    console.error("Error fetching Notion page info:", error);
+    setIsLoading(false);
+    setTranscriptionStatus("");
+    // Don't block adding the document if title fetch fails
+    documentTitle = undefined;
+  }
+}
+
     const newLinks = [
       ...addedLinks,
       {
@@ -535,6 +568,7 @@ useEffect(() => {
                             {item.type === "Youtube Video" && `Video Name: ${item.title}`}
                             {item.type === "Google Docs" && `Document Name: ${item.title}`}
                             {item.type === "Google Sheets" && `Sheet Name: ${item.title}`}
+                            {item.type === "Notion Page" && `Page Name: ${item.title}`}
                           </div>
                         )}
                       </>

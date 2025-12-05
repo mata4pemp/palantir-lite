@@ -112,8 +112,8 @@ export const sendChatMessage = async (
           const pageId = extractNotionPageId(doc.url);
           if (pageId) {
             try {
-              const content = await downloadNotionPage(doc.url);
-              systemMessage += `\n\n--- Content from Notion Page (${doc.url}) ---\n${content}\n--- End of Notion Page ---\n`;
+              const { content, title } = await downloadNotionPage(doc.url);
+              systemMessage += `\n\n--- Content from Notion Page "${title}" (${doc.url}) ---\n${content}\n--- End of Notion Page ---\n`;
             } catch (error: any) {
               console.error("Error fetching Notion Page:", error);
             }
