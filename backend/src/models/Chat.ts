@@ -13,6 +13,7 @@ export interface IChat extends Document {
     type: string;
     url: string;
   }>;
+  isPinned: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -58,6 +59,10 @@ const ChatSchema = new Schema<IChat>(
         },
       },
     ],
+    isPinned: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

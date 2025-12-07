@@ -10,7 +10,7 @@ export const getUserChats = async (
     const userId = req.user?.userId; //from auth middleware
 
     const chats = await Chat.find({ userId })
-      .select("name createdAt updatedAt")
+      .select("name createdAt updatedAt isPinned")
       .sort({ updatedAt: -1 });
 
     return res.json({ chats });
@@ -177,5 +177,32 @@ export const deleteChat = async (
   } catch (error: any) {
     console.error("Delete chat error:", error);
     return res.status(500).json({ error: "Failed to delete chat" });
+  }
+};
+
+//toggle pin status of a chat
+export const togglePinChat = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    const userId = req.user?.userId;
+    const { chatId } = req.params;
+    const { isPinned } = req.body;
+
+    const chat = await Chat.findOneAndUpdate(
+      { _id: chatId, userId },
+      { isPinned },
+      { new: true }
+    );
+
+    if (!chat) {
+      return res.status(404).json({ error: "Chat not found" });
+    }
+
+    return res.json({ chat });
+  } catch (error: any) {
+    console.error("Toggle pin chat error:", error);
+    return res.status(500).json({ error: "Failed to pin/unpin chat" });
   }
 };

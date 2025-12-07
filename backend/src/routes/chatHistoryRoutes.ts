@@ -7,6 +7,7 @@ import {
   updateChatDocuments,
   addMessageToChat,
   deleteChat,
+  togglePinChat,
 } from "../controllers/chatHistoryController";
 import { auth } from "../middleware/auth";
 
@@ -17,6 +18,7 @@ router.get("/", auth, getUserChats);
 router.get("/:chatId", auth, getChatById);
 router.post("/", auth, createChat);
 router.put("/:chatId/name", auth, updateChatName);
+router.put("/:chatId/pin", auth, togglePinChat);
 router.put("/:chatId", auth, updateChatDocuments);
 router.post("/:chatId/messages", auth, addMessageToChat);
 router.delete("/:chatId", auth, deleteChat);

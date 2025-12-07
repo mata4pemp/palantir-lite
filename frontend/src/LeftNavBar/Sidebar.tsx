@@ -13,19 +13,39 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ onNewChat }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [darkMode, setDarkMode] = useState<boolean>(false);
+  const [darkMode, setDarkMode] = useState<boolean>(() => {
+    // Initialize from localStorage
+    const savedMode = localStorage.getItem("darkMode");
+    return savedMode === "true";
+  });
   //chat history
   const [chats, setChats] = useState<
-    Array<{ _id: string; name: string; updatedAt: string }>
+    Array<{ _id: string; name: string; updatedAt: string; isPinned?: boolean }>
   >([]);
   const [editingChatId, setEditingChatId] = useState<string | null>(null);
   const [editingChatName, setEditingChatName] = useState<string>("");
 
   //able to turn on/off dark mode
   const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-    document.body.classList.toggle("dark-mode");
+    const newMode = !darkMode;
+    setDarkMode(newMode);
+    localStorage.setItem("darkMode", newMode.toString());
+
+    if (newMode) {
+      document.body.classList.add("dark-mode");
+    } else {
+      document.body.classList.remove("dark-mode");
+    }
   };
+
+  // Apply dark mode on component mount
+  useEffect(() => {
+    if (darkMode) {
+      document.body.classList.add("dark-mode");
+    } else {
+      document.body.classList.remove("dark-mode");
+    }
+  }, []);
 
   const fetchChats = async () => {
     try {
@@ -111,6 +131,25 @@ useEffect(() => {
     }
   };
 
+  const handleTogglePin = async (chatId: string, currentPinState: boolean, e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent navigation
+
+    try {
+      await axios.put(
+        `http://localhost:5001/api/chats/${chatId}/pin`,
+        { isPinned: !currentPinState },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      fetchChats(); // Refresh the list
+    } catch (error) {
+      console.error("Error pinning chat:", error);
+    }
+  };
+
   const handleSignOut = () => {
     localStorage.removeItem("token");
     //redirect to sign in after signout
@@ -172,7 +211,14 @@ useEffect(() => {
       <div className="chat-history">
         <h3 className="chat-history-title">Recent Chats</h3>
         <div className="chat-list">
-          {chats.map((chat) => (
+          {chats
+            .sort((a, b) => {
+              // Sort pinned chats to the top
+              if (a.isPinned && !b.isPinned) return -1;
+              if (!a.isPinned && b.isPinned) return 1;
+              return 0;
+            })
+            .map((chat) => (
             <div key={chat._id} className="chat-list-item-wrapper">
               {editingChatId === chat._id ? (
                 <input
@@ -198,6 +244,24 @@ useEffect(() => {
                 >
                   <span className="chat-name">{chat.name}</span>
                   <div className="chat-actions">
+                    <button
+                      className={`pin-chat-button ${chat.isPinned ? 'pinned' : ''}`}
+                      onClick={(e) => handleTogglePin(chat._id, chat.isPinned || false, e)}
+                      title={chat.isPinned ? "Unpin chat" : "Pin chat"}
+                    >
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill={chat.isPinned ? "currentColor" : "none"}
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                      </svg>
+                    </button>
                     <button
                       className="edit-chat-button"
                       onClick={(e) => handleEditChat(chat._id, chat.name, e)}

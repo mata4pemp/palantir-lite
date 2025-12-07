@@ -37,6 +37,7 @@ const [transcriptionStatus, setTranscriptionStatus] = useState<string>("");
   const [currentChatId, setCurrentChatId] = useState<string | null>(null);
   const [chatName, setChatName] = useState<string>("Untitled Chat"); //name of chat
   const [isEditingName, setIsEditingName] = useState<boolean>(false); //whether the user is editing the chat name
+  const [copiedMessageIndex, setCopiedMessageIndex] = useState<number | null>(null); //track which message was copied
 
   //check if the input of the link is valid URL
   const isValidURL = (urlString: string): boolean => {
@@ -411,6 +412,18 @@ useEffect(() => {
     setAddedLinks(updatedLinks);
   };
 
+  //copy message to clipboard
+  const handleCopyMessage = async (content: string, index: number) => {
+    try {
+      await navigator.clipboard.writeText(content);
+      setCopiedMessageIndex(index);
+      // Reset copied state after 2 seconds
+      setTimeout(() => setCopiedMessageIndex(null), 2000);
+    } catch (error) {
+      console.error("Failed to copy message:", error);
+    }
+  };
+
   //auto show popup when custom test is selcted
   useEffect(() => {
     if (selectedType === "Custom Text") {
@@ -699,7 +712,43 @@ useEffect(() => {
           ) : (
             chatMessages.map((message, index) => (
               <div key={index} className={`chat-message ${message.role}`}>
-                {message.content}
+                <div className="message-content">{message.content}</div>
+                <button
+                  onClick={() => handleCopyMessage(message.content, index)}
+                  className={`copy-button ${copiedMessageIndex === index ? "copied" : ""}`}
+                  title={copiedMessageIndex === index ? "Copied!" : "Copy message"}
+                >
+                  {copiedMessageIndex === index ? (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                  )}
+                </button>
               </div>
             ))
           )}
@@ -708,6 +757,18 @@ useEffect(() => {
               <div className="typing-indicator">AI is thinking...</div>
             </div>
           )}
+        </div>
+
+        {/* AI Model Badge */}
+        <div className="ai-model-badge-container">
+          <div className="ai-model-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M12 16v-4"></path>
+              <path d="M12 8h.01"></path>
+            </svg>
+            <span>GPT-3.5 Turbo</span>
+          </div>
         </div>
 
         {/* Chat Input Area */}

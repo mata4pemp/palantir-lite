@@ -1,13 +1,279 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: 'Avenir', 'Avenir Next', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #ffffff;
+  color: #1f2937;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+* {
+  font-family: 'Avenir', 'Avenir Next', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+/* Dark Mode Styles */
+body.dark-mode {
+  background-color: #0f172a;
+  color: #f1f5f9;
+}
+
+body.dark-mode .newchat-container {
+  background-color: #0f172a;
+  color: #f1f5f9;
+}
+
+/* Left Panel - Document Upload Section (Dark Mode) */
+body.dark-mode .left-panel {
+  background-color: transparent;
+  color: #f1f5f9;
+}
+
+body.dark-mode .left-panel h1 {
+  color: #f1f5f9;
+}
+
+body.dark-mode .left-panel p {
+  color: #cbd5e1;
+}
+
+body.dark-mode .document-select,
+body.dark-mode .link-input {
+  background-color: #334155;
+  color: #f1f5f9;
+  border-color: #475569;
+}
+
+body.dark-mode .document-select:focus,
+body.dark-mode .link-input:focus {
+  border-color: #667eea;
+}
+
+body.dark-mode .link-input::placeholder {
+  color: #94a3b8;
+}
+
+body.dark-mode .add-button {
+  background-color: #667eea;
+  color: white;
+}
+
+body.dark-mode .add-button:hover {
+  background-color: #5568d3;
+}
+
+body.dark-mode .document-item {
+  background-color: #334155;
+  color: #f1f5f9;
+}
+
+body.dark-mode .document-link {
+  color: #818cf8;
+}
+
+body.dark-mode .document-item strong {
+  color: #f1f5f9;
+}
+
+body.dark-mode .document-item div {
+  color: #cbd5e1;
+}
+
+/* Right Panel - Chat Interface (Dark Mode) */
+body.dark-mode .right-panel {
+  background-color: #1e293b;
+  border-color: #334155;
+}
+
+body.dark-mode .chat-name-header {
+  background-color: #1e293b;
+  border-color: #334155;
+}
+
+body.dark-mode .chat-name-title {
+  color: #f1f5f9;
+}
+
+body.dark-mode .chat-name-title:hover {
+  color: #818cf8;
+}
+
+body.dark-mode .chat-name-input {
+  background-color: #334155;
+  color: #f1f5f9;
+  border-color: #667eea;
+}
+
+body.dark-mode .chat-messages {
+  background-color: #1e293b;
+}
+
+body.dark-mode .chat-placeholder {
+  color: #64748b;
+}
+
+body.dark-mode .chat-message.user {
+  background-color: #667eea;
+  color: white;
+}
+
+body.dark-mode .chat-message.assistant {
+  background-color: #334155;
+  color: #f1f5f9;
+}
+
+body.dark-mode .ai-model-badge-container {
+  border-color: #334155;
+}
+
+body.dark-mode .ai-model-badge {
+  background-color: #334155;
+  color: #cbd5e1;
+  border-color: #475569;
+}
+
+body.dark-mode .chat-input-area {
+  background-color: #1e293b;
+  border-color: #334155;
+}
+
+body.dark-mode .chat-input {
+  background-color: #334155;
+  color: #f1f5f9;
+  border-color: #475569;
+}
+
+body.dark-mode .chat-input:focus {
+  border-color: #667eea;
+}
+
+body.dark-mode .send-button {
+  background-color: #667eea;
+  color: white;
+}
+
+body.dark-mode .send-button:hover {
+  background-color: #5568d3;
+}
+
+/* Popup (Dark Mode) */
+body.dark-mode .popup-overlay {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+body.dark-mode .popup-content {
+  background-color: #1e293b;
+  color: #f1f5f9;
+}
+
+body.dark-mode .popup-content h2 {
+  color: #f1f5f9;
+}
+
+body.dark-mode .custom-text-area {
+  background-color: #334155;
+  color: #f1f5f9;
+  border-color: #475569;
+}
+
+body.dark-mode .custom-text-area:focus {
+  border-color: #667eea;
+}
+
+body.dark-mode .save-button {
+  background-color: #667eea;
+  color: white;
+}
+
+body.dark-mode .save-button:hover {
+  background-color: #5568d3;
+}
+
+body.dark-mode .cancel-button {
+  background-color: #334155;
+  color: #cbd5e1;
+}
+
+body.dark-mode .cancel-button:hover {
+  background-color: #475569;
+}
+
+/* Copy button in dark mode */
+body.dark-mode .copy-button {
+  color: rgba(241, 245, 249, 0.4);
+}
+
+body.dark-mode .copy-button:hover {
+  color: rgba(241, 245, 249, 0.7);
+}
+
+body.dark-mode .chat-message.user .copy-button {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+body.dark-mode .chat-message.user .copy-button:hover {
+  color: rgba(255, 255, 255, 1);
+}
+
+/* Transcription Status (Dark Mode) */
+body.dark-mode .transcription-status {
+  background-color: #1e3a5f;
+  border-color: #3b82f6;
+  color: #93c5fd;
+}
+
+/* Authentication Pages (Dark Mode) */
+body.dark-mode .auth-container {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+}
+
+body.dark-mode .auth-card {
+  background-color: #1e293b;
+  border-color: #334155;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-mode .auth-card h1 {
+  color: #f1f5f9;
+}
+
+body.dark-mode .auth-card p {
+  color: #cbd5e1;
+}
+
+body.dark-mode .auth-input {
+  background-color: #334155;
+  color: #f1f5f9;
+  border-color: #475569;
+}
+
+body.dark-mode .auth-input:focus {
+  border-color: #667eea;
+  background-color: #334155;
+}
+
+body.dark-mode .auth-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+body.dark-mode .auth-button:hover {
+  background: linear-gradient(135deg, #5568d3 0%, #65408e 100%);
+}
+
+body.dark-mode .auth-link {
+  color: #818cf8;
+}
+
+body.dark-mode .auth-link:hover {
+  color: #a5b4fc;
 }

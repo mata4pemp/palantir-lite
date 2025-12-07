@@ -139,6 +139,71 @@
   border-radius: 8px;
   max-width: 70%;
   word-wrap: break-word;
+  animation: slideInMessage 0.3s ease-out;
+  opacity: 0;
+  animation-fill-mode: forwards;
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+/* Message content wrapper */
+.message-content {
+  flex: 1;
+}
+
+/* Copy button */
+.copy-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  color: rgba(0, 0, 0, 0.4);
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  flex-shrink: 0;
+}
+
+.chat-message:hover .copy-button {
+  opacity: 1;
+}
+
+.copy-button:hover {
+  color: rgba(0, 0, 0, 0.7);
+  transform: scale(1.1);
+}
+
+.copy-button.copied {
+  color: #10b981;
+}
+
+/* User message copy button */
+.chat-message.user .copy-button {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.chat-message.user .copy-button:hover {
+  color: rgba(255, 255, 255, 1);
+}
+
+.chat-message.user .copy-button.copied {
+  color: #d1fae5;
+}
+
+/* Keyframe animation for chat messages */
+@keyframes slideInMessage {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* User message (on the right) */
@@ -153,6 +218,31 @@
   background-color: #f3f4f6;
   color: black;
   align-self: flex-start;
+}
+
+/* AI Model Badge Container */
+.ai-model-badge-container {
+  padding: 0.75rem 1rem;
+  display: flex;
+  justify-content: flex-start;
+  border-top: 1px solid #e5e7eb;
+}
+
+.ai-model-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #f3f4f6;
+  color: #4b5563;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border: 1px solid #e5e7eb;
+}
+
+.ai-model-badge svg {
+  flex-shrink: 0;
 }
 
 /* Chat input area at bottom */
@@ -230,11 +320,14 @@
   width: 90%;
   max-width: 600px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
 }
 
 .popup-content h2 {
   margin-top: 0;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
 }
 
 /* Custom text area in popup */
@@ -247,7 +340,8 @@
   font-family: inherit;
   resize: vertical;
   min-height: 200px;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  box-sizing: border-box;
 }
 
 .custom-text-area:focus {
@@ -385,4 +479,28 @@
   background-color: #cbd5e1;
   cursor: not-allowed;
   opacity: 0.6;
+}
+
+/* Typing indicator animation */
+.typing-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.typing-indicator::after {
+  content: "...";
+  animation: typingDots 1.5s infinite;
+}
+
+@keyframes typingDots {
+  0%, 20% {
+    content: ".";
+  }
+  40% {
+    content: "..";
+  }
+  60%, 100% {
+    content: "...";
+  }
 }
