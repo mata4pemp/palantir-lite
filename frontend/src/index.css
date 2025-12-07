@@ -23,205 +23,213 @@ code {
 
 /* Dark Mode Styles */
 body.dark-mode {
-  background-color: #0f172a;
-  color: #f1f5f9;
+  background-color: #000000;
+  color: #ffffff;
 }
 
 body.dark-mode .newchat-container {
-  background-color: #0f172a;
-  color: #f1f5f9;
+  background-color: #000000;
+  color: #ffffff;
 }
 
 /* Left Panel - Document Upload Section (Dark Mode) */
 body.dark-mode .left-panel {
   background-color: transparent;
-  color: #f1f5f9;
+  color: #ffffff;
 }
 
 body.dark-mode .left-panel h1 {
-  color: #f1f5f9;
+  color: #ffffff;
 }
 
 body.dark-mode .left-panel p {
-  color: #cbd5e1;
+  color: #a1a1aa;
 }
 
 body.dark-mode .document-select,
 body.dark-mode .link-input {
-  background-color: #334155;
-  color: #f1f5f9;
-  border-color: #475569;
+  background-color: #18181b;
+  color: #ffffff;
+  border-color: #27272a;
 }
 
 body.dark-mode .document-select:focus,
 body.dark-mode .link-input:focus {
-  border-color: #667eea;
+  border-color: #3f3f46;
 }
 
 body.dark-mode .link-input::placeholder {
-  color: #94a3b8;
+  color: #71717a;
 }
 
 body.dark-mode .add-button {
-  background-color: #667eea;
-  color: white;
+  background-color: #ffffff;
+  color: #000000;
 }
 
 body.dark-mode .add-button:hover {
-  background-color: #5568d3;
+  background-color: #f4f4f5;
 }
 
 body.dark-mode .document-item {
-  background-color: #334155;
-  color: #f1f5f9;
+  background-color: #18181b;
+  color: #ffffff;
+  border: 1px solid #27272a;
 }
 
 body.dark-mode .document-link {
-  color: #818cf8;
+  color: #a1a1aa;
 }
 
 body.dark-mode .document-item strong {
-  color: #f1f5f9;
+  color: #ffffff;
 }
 
 body.dark-mode .document-item div {
-  color: #cbd5e1;
+  color: #a1a1aa;
 }
 
 /* Right Panel - Chat Interface (Dark Mode) */
 body.dark-mode .right-panel {
-  background-color: #1e293b;
-  border-color: #334155;
+  background-color: #000000;
+  border-color: #27272a;
 }
 
 body.dark-mode .chat-name-header {
-  background-color: #1e293b;
-  border-color: #334155;
+  background-color: #000000;
+  border-color: #27272a;
 }
 
 body.dark-mode .chat-name-title {
-  color: #f1f5f9;
+  color: #ffffff;
 }
 
 body.dark-mode .chat-name-title:hover {
-  color: #818cf8;
+  color: #a1a1aa;
 }
 
 body.dark-mode .chat-name-input {
-  background-color: #334155;
-  color: #f1f5f9;
-  border-color: #667eea;
+  background-color: #18181b;
+  color: #ffffff;
+  border-color: #3f3f46;
 }
 
 body.dark-mode .chat-messages {
-  background-color: #1e293b;
+  background-color: #000000;
 }
 
 body.dark-mode .chat-placeholder {
-  color: #64748b;
+  color: #71717a;
 }
 
 body.dark-mode .chat-message.user {
-  background-color: #667eea;
-  color: white;
+  background-color: #ffffff;
+  color: #000000;
 }
 
 body.dark-mode .chat-message.assistant {
-  background-color: #334155;
-  color: #f1f5f9;
+  background-color: #18181b;
+  color: #ffffff;
+  border: 1px solid #27272a;
 }
 
 body.dark-mode .ai-model-badge-container {
-  border-color: #334155;
+  border-color: #27272a;
 }
 
 body.dark-mode .ai-model-badge {
-  background-color: #334155;
-  color: #cbd5e1;
-  border-color: #475569;
+  background-color: #18181b;
+  color: #a1a1aa;
+  border-color: #27272a;
 }
 
 body.dark-mode .chat-input-area {
-  background-color: #1e293b;
-  border-color: #334155;
+  background-color: #000000;
+  border-color: #27272a;
 }
 
 body.dark-mode .chat-input {
-  background-color: #334155;
-  color: #f1f5f9;
-  border-color: #475569;
+  background-color: #18181b;
+  color: #ffffff;
+  border-color: #27272a;
 }
 
 body.dark-mode .chat-input:focus {
-  border-color: #667eea;
+  border-color: #3f3f46;
 }
 
 body.dark-mode .send-button {
-  background-color: #667eea;
-  color: white;
+  background-color: #ffffff;
+  color: #000000;
 }
 
 body.dark-mode .send-button:hover {
-  background-color: #5568d3;
+  background-color: #f4f4f5;
 }
 
 /* Popup (Dark Mode) */
 body.dark-mode .popup-overlay {
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.8);
 }
 
 body.dark-mode .popup-content {
-  background-color: #1e293b;
-  color: #f1f5f9;
+  background-color: #18181b;
+  color: #ffffff;
+  border: 1px solid #27272a;
 }
 
 body.dark-mode .popup-content h2 {
-  color: #f1f5f9;
+  color: #ffffff;
 }
 
 body.dark-mode .custom-text-area {
-  background-color: #334155;
-  color: #f1f5f9;
-  border-color: #475569;
+  background-color: #000000;
+  color: #ffffff;
+  border-color: #27272a;
 }
 
 body.dark-mode .custom-text-area:focus {
-  border-color: #667eea;
+  border-color: #3f3f46;
 }
 
 body.dark-mode .save-button {
-  background-color: #667eea;
-  color: white;
+  background-color: #ffffff;
+  color: #000000;
 }
 
 body.dark-mode .save-button:hover {
-  background-color: #5568d3;
+  background-color: #f4f4f5;
 }
 
 body.dark-mode .cancel-button {
-  background-color: #334155;
-  color: #cbd5e1;
+  background-color: #27272a;
+  color: #a1a1aa;
 }
 
 body.dark-mode .cancel-button:hover {
-  background-color: #475569;
+  background-color: #3f3f46;
+}
+
+/* Document warning messages (Dark Mode) */
+body.dark-mode .document-warning {
+  color: #ffffff !important;
 }
 
 /* Copy button in dark mode */
 body.dark-mode .copy-button {
-  color: rgba(241, 245, 249, 0.4);
+  color: rgba(161, 161, 170, 0.6);
 }
 
 body.dark-mode .copy-button:hover {
-  color: rgba(241, 245, 249, 0.7);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 body.dark-mode .chat-message.user .copy-button {
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(0, 0, 0, 0.4);
 }
 
 body.dark-mode .chat-message.user .copy-button:hover {
-  color: rgba(255, 255, 255, 1);
+  color: rgba(0, 0, 0, 0.7);
 }
 
 /* Transcription Status (Dark Mode) */
@@ -233,47 +241,47 @@ body.dark-mode .transcription-status {
 
 /* Authentication Pages (Dark Mode) */
 body.dark-mode .auth-container {
-  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  background: #000000;
 }
 
 body.dark-mode .auth-card {
-  background-color: #1e293b;
-  border-color: #334155;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  background-color: #18181b;
+  border-color: #27272a;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
 }
 
 body.dark-mode .auth-card h1 {
-  color: #f1f5f9;
+  color: #ffffff;
 }
 
 body.dark-mode .auth-card p {
-  color: #cbd5e1;
+  color: #a1a1aa;
 }
 
 body.dark-mode .auth-input {
-  background-color: #334155;
-  color: #f1f5f9;
-  border-color: #475569;
+  background-color: #000000;
+  color: #ffffff;
+  border-color: #27272a;
 }
 
 body.dark-mode .auth-input:focus {
-  border-color: #667eea;
-  background-color: #334155;
+  border-color: #3f3f46;
+  background-color: #000000;
 }
 
 body.dark-mode .auth-button {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: #ffffff;
+  color: #000000;
 }
 
 body.dark-mode .auth-button:hover {
-  background: linear-gradient(135deg, #5568d3 0%, #65408e 100%);
+  background: #f4f4f5;
 }
 
 body.dark-mode .auth-link {
-  color: #818cf8;
+  color: #a1a1aa;
 }
 
 body.dark-mode .auth-link:hover {
-  color: #a5b4fc;
+  color: #ffffff;
 }

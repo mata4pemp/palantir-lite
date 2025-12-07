@@ -93,7 +93,7 @@
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
-  color: #9ca3af;
+  color: #71717a;
   margin-bottom: 0.5rem;
   padding: 0 0.5rem;
   flex-shrink: 0; /* Don't shrink the title */
@@ -118,18 +118,20 @@
   justify-content: space-between;
   padding: 0.5rem;
   border-radius: 6px;
-  color: #e5e7eb;
+  color: #a1a1aa;
   text-decoration: none;
   font-size: 0.875rem;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
 }
 
 .chat-list-item:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: #18181b;
+  color: #ffffff;
 }
 
 .chat-list-item.active {
-  background-color: rgba(102, 126, 234, 0.2);
+  background-color: #18181b;
+  color: #ffffff;
 }
 
 .chat-name {
@@ -185,10 +187,14 @@
 .chat-name-edit-input {
   width: 100%;
   padding: 0.5rem;
-  background-color: #334155;
-  color: #e5e7eb;
-  border: 1px solid #667eea;
+  background-color: #18181b;
+  color: #ffffff;
+  border: 1px solid #3f3f46;
   border-radius: 6px;
   font-size: 0.875rem;
   outline: none;
+}
+
+.chat-name-edit-input:focus {
+  border-color: #71717a;
 }

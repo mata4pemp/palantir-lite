@@ -14,9 +14,9 @@ const Sidebar: React.FC<SidebarProps> = ({ onNewChat }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [darkMode, setDarkMode] = useState<boolean>(() => {
-    // Initialize from localStorage
+    // Initialize from localStorage, default to true (dark mode)
     const savedMode = localStorage.getItem("darkMode");
-    return savedMode === "true";
+    return savedMode === null ? true : savedMode === "true";
   });
   //chat history
   const [chats, setChats] = useState<

@@ -495,6 +495,7 @@ useEffect(() => {
           {(selectedType === "Google Docs" ||
             selectedType === "Google Sheets") && (
             <div
+              className="document-warning"
               style={{
                 color: "black",
                 fontSize: "13px",
@@ -511,6 +512,7 @@ useEffect(() => {
           {/* Warning for Notion Page */}
           {selectedType === "Notion Page" && (
             <div
+              className="document-warning"
               style={{
                 color: "black",
                 fontSize: "13px",

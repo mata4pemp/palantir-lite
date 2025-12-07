@@ -9,9 +9,9 @@
   top: 0;
   left: 0;
   right: 0;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(0, 0, 0, 0.95);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid #27272a;
   z-index: 1000;
   padding: 1rem 2rem;
 }
@@ -27,7 +27,7 @@
 .nav-logo {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #667eea;
+  color: #ffffff;
 }
 
 .nav-links {
@@ -39,7 +39,7 @@
 .nav-link {
   background: transparent;
   border: none;
-  color: #475569;
+  color: #a1a1aa;
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
@@ -48,25 +48,26 @@
 }
 
 .nav-link:hover {
-  color: #667eea;
+  color: #ffffff;
 }
 
 .nav-button-primary {
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: #ffffff;
+  color: #000000;
   border: none;
   border-radius: 6px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);
 }
 
 .nav-button-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  background: #f4f4f5;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
 }
 
 /* Hero Section */
@@ -75,7 +76,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #000000;
   padding: 4rem 2rem;
   padding-top: 6rem;
   text-align: center;
@@ -93,7 +94,7 @@
   bottom: 0;
   background: radial-gradient(
     circle at 20% 50%,
-    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.03) 0%,
     transparent 50%
   );
   pointer-events: none;
@@ -134,7 +135,7 @@
 
 .hero-description {
   font-size: 1.25rem;
-  color: rgba(255, 255, 255, 0.95);
+  color: #a1a1aa;
   margin-bottom: 2.5rem;
   line-height: 1.8;
   max-width: 700px;
@@ -154,17 +155,18 @@
   font-size: 1.1rem;
   font-weight: 600;
   background: white;
-  color: #667eea;
+  color: #000000;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 14px rgba(255, 255, 255, 0.2);
 }
 
 .cta-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  background: #f4f4f5;
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3);
 }
 
 .cta-secondary {
@@ -187,14 +189,14 @@
 /* Features Section */
 .features-section {
   padding: 5rem 2rem;
-  background: #f9fafb;
+  background: #000000;
 }
 
 .section-title {
   text-align: center;
   font-size: 2.5rem;
   font-weight: 700;
-  color: #1e293b;
+  color: #ffffff;
   margin-bottom: 3rem;
 }
 
@@ -207,49 +209,49 @@
 }
 
 .feature-card {
-  background: white;
+  background: #18181b;
   padding: 2rem;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   transition: all 0.3s ease;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #27272a;
 }
 
 .feature-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.15);
-  border-color: #667eea;
+  box-shadow: 0 8px 24px rgba(255, 255, 255, 0.1);
+  border-color: #ffffff;
 }
 
 .feature-icon {
   width: 64px;
   height: 64px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #ffffff;
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 1.5rem;
-  color: white;
+  color: #000000;
 }
 
 .feature-title {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #1e293b;
+  color: #ffffff;
   margin-bottom: 1rem;
 }
 
 .feature-description {
   font-size: 1rem;
-  color: #64748b;
+  color: #a1a1aa;
   line-height: 1.7;
 }
 
 /* Use Cases Section */
 .use-cases-section {
   padding: 5rem 2rem;
-  background: white;
+  background: #000000;
 }
 
 .use-cases-grid {
@@ -261,35 +263,39 @@
 }
 
 .use-case-card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #18181b;
   padding: 2.5rem;
   border-radius: 12px;
   color: white;
   transition: all 0.3s ease;
+  border: 1px solid #27272a;
 }
 
 .use-case-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 12px 28px rgba(255, 255, 255, 0.1);
+  border-color: #ffffff;
 }
 
 .use-case-card h3 {
   font-size: 1.75rem;
   font-weight: 700;
   margin-bottom: 1rem;
+  color: #ffffff;
 }
 
 .use-case-card p {
   font-size: 1rem;
   line-height: 1.7;
-  opacity: 0.95;
+  color: #a1a1aa;
 }
 
 /* CTA Section */
 .cta-section {
   padding: 5rem 2rem;
-  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  background: #000000;
   text-align: center;
+  border-top: 1px solid #27272a;
 }
 
 .cta-content {
@@ -306,7 +312,7 @@
 
 .cta-description {
   font-size: 1.25rem;
-  color: rgba(255, 255, 255, 0.9);
+  color: #a1a1aa;
   margin-bottom: 2.5rem;
   line-height: 1.7;
 }
@@ -315,18 +321,167 @@
   padding: 1.25rem 3rem;
   font-size: 1.2rem;
   font-weight: 600;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: #ffffff;
+  color: #000000;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 14px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 4px 14px rgba(255, 255, 255, 0.2);
 }
 
 .cta-primary-large:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+  background: #f4f4f5;
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3);
+}
+
+/* Dark Mode Styles */
+body.dark-mode .homepage-nav {
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid #27272a;
+}
+
+body.dark-mode .nav-logo {
+  color: #ffffff;
+}
+
+body.dark-mode .nav-link {
+  color: #a1a1aa;
+}
+
+body.dark-mode .nav-link:hover {
+  color: #ffffff;
+}
+
+body.dark-mode .nav-button-primary {
+  background: #ffffff;
+  color: #000000;
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);
+}
+
+body.dark-mode .nav-button-primary:hover {
+  background: #f4f4f5;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+}
+
+body.dark-mode .hero-section {
+  background: #000000;
+}
+
+body.dark-mode .hero-section::before {
+  background: radial-gradient(
+    circle at 20% 50%,
+    rgba(255, 255, 255, 0.03) 0%,
+    transparent 50%
+  );
+}
+
+body.dark-mode .hero-title {
+  color: #ffffff;
+}
+
+body.dark-mode .gradient-text {
+  background: linear-gradient(90deg, #ffffff 0%, #a1a1aa 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+body.dark-mode .hero-description {
+  color: #a1a1aa;
+}
+
+body.dark-mode .cta-primary {
+  background: #ffffff;
+  color: #000000;
+}
+
+body.dark-mode .cta-primary:hover {
+  background: #f4f4f5;
+}
+
+body.dark-mode .cta-secondary {
+  background: transparent;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+}
+
+body.dark-mode .cta-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .features-section {
+  background: #000000;
+}
+
+body.dark-mode .section-title {
+  color: #ffffff;
+}
+
+body.dark-mode .feature-card {
+  background: #18181b;
+  border-color: #27272a;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .feature-card:hover {
+  box-shadow: 0 8px 24px rgba(255, 255, 255, 0.1);
+  border-color: #ffffff;
+}
+
+body.dark-mode .feature-icon {
+  background: #ffffff;
+  color: #000000;
+}
+
+body.dark-mode .feature-title {
+  color: #ffffff;
+}
+
+body.dark-mode .feature-description {
+  color: #a1a1aa;
+}
+
+body.dark-mode .use-cases-section {
+  background: #000000;
+}
+
+body.dark-mode .use-case-card {
+  background: #18181b;
+  color: #ffffff;
+  border: 1px solid #27272a;
+}
+
+body.dark-mode .use-case-card:hover {
+  box-shadow: 0 12px 28px rgba(255, 255, 255, 0.1);
+  border-color: #ffffff;
+}
+
+body.dark-mode .cta-section {
+  background: #000000;
+  border-top: 1px solid #27272a;
+}
+
+body.dark-mode .cta-title {
+  color: #ffffff;
+}
+
+body.dark-mode .cta-description {
+  color: #a1a1aa;
+}
+
+body.dark-mode .cta-primary-large {
+  background: #ffffff;
+  color: #000000;
+  box-shadow: 0 4px 14px rgba(255, 255, 255, 0.2);
+}
+
+body.dark-mode .cta-primary-large:hover {
+  background: #f4f4f5;
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3);
 }
 
 /* Responsive Design */
