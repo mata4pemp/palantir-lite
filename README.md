@@ -30,8 +30,61 @@ Auth Routes
 API Routes
 
 ------------
-Tech stacks
-MERN Stack - MongoDB, Express, React, Node.js
+Technologies Used
+
+Frontend:
+- React 18.3.1 - JavaScript library for building user interfaces
+- React Router DOM 7.1.1 - Client-side routing
+- Axios 1.7.9 - HTTP client for API requests
+- TypeScript 5.6.2 - Static type checking
+- Vite 6.0.1 - Build tool and development server
+
+Backend:
+- Node.js - JavaScript runtime environment
+- Express.js 4.21.2 - Web application framework
+- MongoDB - NoSQL database
+- Mongoose 8.9.3 - MongoDB object modeling
+- TypeScript 5.7.2 - Static type checking
+
+Authentication & Security:
+- JSON Web Tokens (JWT) - Token-based authentication
+- bcryptjs 2.4.3 - Password hashing
+- dotenv 16.4.7 - Environment variable management
+
+AI & External APIs:
+- OpenAI API (gpt-3.5-turbo, Whisper) - AI chat completions and audio transcription
+- Google Docs/Sheets API - Document content extraction
+- Notion API - Page content scraping
+
+Additional Libraries:
+- ytdl-core 4.11.5 - YouTube video downloading
+- yt-dlp-exec 1.0.3 - YouTube audio extraction
+- cheerio 1.0.0 - HTML parsing for Notion pages
+- pdf-parse 1.1.1 - PDF text extraction
+- cors 2.8.5 - Cross-origin resource sharing
+- multer 1.4.5-lts.1 - File upload handling
+
+Design System:
+- shadcn/ui - Black and white component design system
+- Custom CSS with dark mode support
+
+--------------
+
+Attributions
+
+OpenAI. (2024). ChatGPT (GPT-3.5-turbo) [Large language model]. https://openai.com/chatgpt
+
+OpenAI. (2024). Whisper API [Audio transcription model]. https://platform.openai.com/docs/guides/speech-to-text
+
+Google LLC. (2024). Google Docs API [Web service]. https://developers.google.com/docs/api
+
+Google LLC. (2024). Google Sheets API [Web service]. https://developers.google.com/sheets/api
+
+Notion Labs, Inc. (2024). Notion API [Web service]. https://developers.notion.com/
+
+shadcn. (2024). shadcn/ui [UI component library]. https://ui.shadcn.com/
+
+This project was developed with assistance from AI tools including Claude (Anthropic) and ChatGPT (OpenAI) for code generation, debugging, and documentation.
 
 --------------
 

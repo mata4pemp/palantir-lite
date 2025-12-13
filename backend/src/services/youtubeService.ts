@@ -69,7 +69,6 @@ export const downloadYoutubeAudio = async (
 
     return { audioPath, duration, title };
   } catch (error: any) {
-    console.error("Error downloading Youtube audio:", error);
     throw new Error(`Failed to download audio: ${error.message}`);
   }
 };

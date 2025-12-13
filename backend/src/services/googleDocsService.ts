@@ -63,8 +63,6 @@ export const downloadGoogleDoc = async (
       }
     }
 
-    console.log("Extracted Google Doc title:", title);
-
     // Get the text content
     const exportUrl = `https://docs.google.com/document/d/${docId}/export?format=txt`;
     const response = await axios.get(exportUrl, {
@@ -119,8 +117,6 @@ export const downloadGoogleSheet = async (
         title = titleMatch[1].replace(/ - Google Sheets$/i, "");
       }
     }
-
-    console.log("Extracted Google Sheet title:", title);
 
     // Get the CSV content
     const exportUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv`;

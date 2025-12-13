@@ -45,10 +45,8 @@ export const downloadNotionPage = async (pageUrl: string): Promise<{ content: st
         }
       }
     } catch (urlError) {
-      console.log('Could not extract title from URL, will try HTML:', urlError);
+      // Could not extract title from URL, will try HTML
     }
-
-    console.log('Extracted title from URL slug:', title);
 
     //fetch the HTML from notion page
     const response = await axios.get(pageUrl, {
@@ -80,8 +78,6 @@ export const downloadNotionPage = async (pageUrl: string): Promise<{ content: st
         }
       }
     }
-
-    console.log('Final Notion page title:', title);
 
     //remove script tags, style and nav elemtns
     $('script').remove();

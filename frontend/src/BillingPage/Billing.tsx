@@ -7,12 +7,10 @@ function Billing() {
 
   const handleManageSubscription = () => {
     // TODO: Integrate with Stripe Customer Portal
-    console.log("Manage subscription clicked - Stripe integration pending");
   };
 
   const handleDownloadInvoices = () => {
     // TODO: Integrate with Stripe Invoices API
-    console.log("Download invoices clicked - Stripe integration pending");
   };
 
   return (

@@ -54,7 +54,6 @@ const Sidebar: React.FC<SidebarProps> = ({ onNewChat }) => {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      console.log("Fetched chats:", response.data.chats);
       setChats(response.data.chats);
     } catch (error) {
       console.error("Error fetching chats:", error);

@@ -31,15 +31,8 @@ Thumbs.db
 # Testing
 coverage/
 
-backend/1764927741655-player-script.js
-backend/1764927741641-player-script.js
-backend/1764858103435-player-script.js
-backend/1764858103424-player-script.js
-backend/1764857026316-player-script.js
-backend/1764857026309-player-script.js
-backend/1764927741655-player-script.js
-backend/1764927741641-player-script.js
-backend/1764858103435-player-script.js
-backend/1764858103424-player-script.js
-backend/1764857026316-player-script.js
-backend/1764857026309-player-script.js
+# YouTube temporary cache files created by ytdl-core
+*-player-script.js
+
+# Temporary audio files
+temp/

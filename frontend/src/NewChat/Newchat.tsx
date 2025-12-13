@@ -118,7 +118,6 @@ const [transcriptionStatus, setTranscriptionStatus] = useState<string>("");
 // if its a youtube video, process it first to get the transcript
 let documentTitle: string | undefined;
 if (selectedType === "Youtube Video") {
-  console.log("Processing Youtube video:", link);
   try {
     setIsLoading(true);
     setTranscriptionStatus(
@@ -135,7 +134,6 @@ if (selectedType === "Youtube Video") {
       }
     );
 
-    console.log("Youtube transcript processed:", response.data);
     documentTitle = response.data.title; // Store the title
     setTranscriptionStatus("✅ Transcription successful!");
 
@@ -239,9 +237,7 @@ if (selectedType === "Notion Page") {
 
     // Create chat in database if this is the first document
     if (!currentChatId) {
-      console.log("Creating new chat...");
       const newChatId = await createNewChat();
-      console.log("Created chat with ID:", newChatId);
       // After creating chat, update it with the new document
       if (newChatId) {
         try {
@@ -254,13 +250,11 @@ if (selectedType === "Notion Page") {
               },
             }
           );
-          console.log("Updated chat documents");
         } catch (error) {
           console.error("Error updating chat documents:", error);
         }
       }
       // Trigger sidebar refresh so new chat appears
-      console.log("Triggering sidebar refresh");
       window.dispatchEvent(new Event("chatUpdated"));
     } else {
       // Chat already exists, update its documents in the database
@@ -274,7 +268,6 @@ if (selectedType === "Notion Page") {
             },
           }
         );
-        console.log("Updated existing chat documents");
       } catch (error) {
         console.error("Error updating existing chat documents:", error);
       }

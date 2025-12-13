@@ -50,8 +50,6 @@ export const createChat = async (
     const userId = req.user?.userId;
     const { name, documents } = req.body;
 
-    console.log("Creating chat with:", { userId, name, documents });
-
     const chat = await Chat.create({
       name: name || "Untitled Chat",
       userId,
@@ -59,7 +57,6 @@ export const createChat = async (
       messages: [],
     });
 
-    console.log("Chat created successfully:", chat._id);
     return res.status(201).json({ chat });
   } catch (error: any) {
     console.error("Create chat error:", error);
