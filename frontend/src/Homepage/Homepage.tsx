@@ -1,10 +1,8 @@
 import React from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./Homepage.css";
 
 function Homepage() {
-  const navigate = useNavigate();
-
   return (
     <div className="homepage">
       {/* Navigation Bar */}
@@ -35,12 +33,9 @@ function Homepage() {
             instant, intelligent answers.
           </p>
           <div className="hero-buttons">
-            <button
-              className="cta-primary"
-              onClick={() => navigate("/newchat")}
-            >
+            <Link to="/newchat" className="cta-primary">
               Start Chatting Now
-            </button>
+            </Link>
             <button className="cta-secondary">Watch Demo</button>
           </div>
         </div>
@@ -231,12 +226,9 @@ function Homepage() {
             Join thousands of users who are already transforming how they
             interact with documents.
           </p>
-          <button
-            className="cta-primary-large"
-            onClick={() => navigate("/newchat")}
-          >
+          <Link to="/newchat" className="cta-primary-large">
             Start Your First Chat
-          </button>
+          </Link>
         </div>
       </section>
     </div>
