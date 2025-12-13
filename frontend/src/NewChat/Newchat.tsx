@@ -77,7 +77,7 @@ const [transcriptionStatus, setTranscriptionStatus] = useState<string>("");
 
       try {
         const response = await axios.post(
-          "http://localhost:5001/api/chat",
+          `${process.env.REACT_APP_API_URL}/api/chat",
           {
             messages: [...chatMessages, userMessage],
             documents: addedLinks,
@@ -125,7 +125,7 @@ if (selectedType === "Youtube Video") {
     );
 
     const response = await axios.post(
-      "http://localhost:5001/api/youtube/process",
+      `${process.env.REACT_APP_API_URL}/api/youtube/process",
       { videoUrl: link },
       {
         headers: {
@@ -165,8 +165,8 @@ if (selectedType === "Google Docs" || selectedType === "Google Sheets") {
 
     // Call backend API to get the title
     const endpoint = selectedType === "Google Docs"
-      ? `http://localhost:5001/api/google/doc/${docId}`
-      : `http://localhost:5001/api/google/sheet/${docId}`;
+      ? `${process.env.REACT_APP_API_URL}/api/google/doc/${docId}`
+      : `${process.env.REACT_APP_API_URL}/api/google/sheet/${docId}`;
 
     const response = await axios.get(endpoint, {
       headers: {
@@ -198,7 +198,7 @@ if (selectedType === "Notion Page") {
     setTranscriptionStatus("Fetching Notion page information...");
 
     const response = await axios.post(
-      "http://localhost:5001/api/notion/page/title",
+      `${process.env.REACT_APP_API_URL}/api/notion/page/title",
       { pageUrl: link },
       {
         headers: {
@@ -242,7 +242,7 @@ if (selectedType === "Notion Page") {
       if (newChatId) {
         try {
           await axios.put(
-            `http://localhost:5001/api/chats/${newChatId}`,
+            `${process.env.REACT_APP_API_URL}/api/chats/${newChatId}`,
             { documents: newLinks },
             {
               headers: {
@@ -260,7 +260,7 @@ if (selectedType === "Notion Page") {
       // Chat already exists, update its documents in the database
       try {
         await axios.put(
-          `http://localhost:5001/api/chats/${currentChatId}`,
+          `${process.env.REACT_APP_API_URL}/api/chats/${currentChatId}`,
           { documents: newLinks },
           {
             headers: {
@@ -277,7 +277,7 @@ if (selectedType === "Notion Page") {
   const createNewChat = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:5001/api/chats",
+        `${process.env.REACT_APP_API_URL}/api/chats",
         {
           name: chatName,
           documents: addedLinks,
@@ -303,7 +303,7 @@ if (selectedType === "Notion Page") {
 
     try {
       await axios.put(
-        `http://localhost:5001/api/chats/${currentChatId}/name`,
+        `${process.env.REACT_APP_API_URL}/api/chats/${currentChatId}/name`,
         { name: newName },
         {
           headers: {
@@ -325,7 +325,7 @@ if (selectedType === "Notion Page") {
 
     try {
       await axios.post(
-        `http://localhost:5001/api/chats/${currentChatId}/messages`,
+        `${process.env.REACT_APP_API_URL}/api/chats/${currentChatId}/messages`,
         { role, content },
         {
           headers: {
@@ -340,7 +340,7 @@ if (selectedType === "Notion Page") {
 
   const loadChat = async (id: string) => {
     try {
-      const response = await axios.get(`http://localhost:5001/api/chats/${id}`, {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/chats/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },

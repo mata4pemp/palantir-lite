@@ -49,7 +49,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onNewChat }) => {
 
   const fetchChats = async () => {
     try {
-      const response = await axios.get("http://localhost:5001/api/chats", {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/chats", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -87,7 +87,7 @@ useEffect(() => {
 
     try {
       await axios.put(
-        `http://localhost:5001/api/chats/${chatId}/name`,
+        `${process.env.REACT_APP_API_URL}/api/chats/${chatId}/name`,
         { name: editingChatName },
         {
           headers: {
@@ -112,7 +112,7 @@ useEffect(() => {
 
     try {
       await axios.delete(
-        `http://localhost:5001/api/chats/${chatId}`,
+        `${process.env.REACT_APP_API_URL}/api/chats/${chatId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -135,7 +135,7 @@ useEffect(() => {
 
     try {
       await axios.put(
-        `http://localhost:5001/api/chats/${chatId}/pin`,
+        `${process.env.REACT_APP_API_URL}/api/chats/${chatId}/pin`,
         { isPinned: !currentPinState },
         {
           headers: {

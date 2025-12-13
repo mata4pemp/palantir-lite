@@ -25,7 +25,7 @@ const SignIn: React.FC = () => {
 
         try {
             const response = await axios.post(
-                'http://localhost:5001/api/auth/signin',
+                `${process.env.REACT_APP_API_URL}/api/auth/signin`,
                 formData
             );
 
