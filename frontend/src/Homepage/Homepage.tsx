@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import "./Homepage.css";
 
 function Homepage() {
@@ -12,15 +12,12 @@ function Homepage() {
         <div className="nav-container">
           <div className="nav-logo">Palantir Lite</div>
           <div className="nav-links">
-            <button className="nav-link" onClick={() => navigate("/signin")}>
+            <Link to="/signin" className="nav-link">
               Sign In
-            </button>
-            <button
-              className="nav-button-primary"
-              onClick={() => navigate("/signup")}
-            >
+            </Link>
+            <Link to="/signup" className="nav-button-primary">
               Get Started
-            </button>
+            </Link>
           </div>
         </div>
       </nav>

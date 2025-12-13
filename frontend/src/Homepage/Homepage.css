@@ -45,6 +45,8 @@
   cursor: pointer;
   padding: 0.5rem 1rem;
   transition: color 0.2s;
+  text-decoration: none;
+  display: inline-block;
 }
 
 .nav-link:hover {
@@ -62,6 +64,8 @@
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);
+  text-decoration: none;
+  display: inline-block;
 }
 
 .nav-button-primary:hover {
