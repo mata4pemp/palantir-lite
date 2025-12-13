@@ -24,7 +24,7 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const token = localStorage.getItem("token");
-  return token ? children : <Navigate to="/signin" />;
+  return token ? children : <Navigate to="/signin" replace />;
 };
 
 function App() {
