@@ -95,7 +95,7 @@
 
 /* Document link styling */
 .document-link {
-  color: #667eea;
+  color: #000000;
   text-decoration: none;
   word-break: break-all; /* Break long URLs */
   display: inline-block;
@@ -214,9 +214,10 @@
 
 /* User message (on the right) */
 .chat-message.user {
-  background-color: #667eea;
+  background-color: #000000;
   color: white;
   align-self: flex-end;
+  transition: all 0.3s ease;
 }
 
 /* Assistant message (on the left) */
@@ -224,6 +225,23 @@
   background-color: #f3f4f6;
   color: black;
   align-self: flex-start;
+  transition: all 0.3s ease;
+}
+
+/* Hover effect for all chat messages */
+.chat-message:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* User message hover effect */
+.chat-message.user:hover {
+  background-color: #27272a;
+}
+
+/* Assistant message hover effect */
+.chat-message.assistant:hover {
+  background-color: #e5e7eb;
 }
 
 /* AI Model Badge Container */
@@ -274,8 +292,8 @@
 }
 
 .chat-input:focus {
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #000000;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
 }
 
 /* Send button */
@@ -353,7 +371,7 @@
 
 .custom-text-area:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #000000;
 }
 
 /* Popup buttons container */
@@ -373,12 +391,12 @@
 }
 
 .save-button {
-  background-color: #667eea;
+  background-color: #000000;
   color: white;
 }
 
 .save-button:hover {
-  background-color: #5568d3;
+  background-color: #27272a;
 }
 
 .cancel-button {
@@ -396,7 +414,7 @@
   border: none;
   cursor: pointer;
   padding: 0.5rem;
-  color: #667eea;
+  color: #000000;
   transition: all 0.2s;
   display: flex;
   align-items: center;
@@ -404,7 +422,7 @@
 }
 
 .edit-button:hover {
-  color: #5568d3;
+  color: #27272a;
   transform: scale(1.1);
 }
 

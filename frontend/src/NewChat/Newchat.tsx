@@ -484,6 +484,22 @@ useEffect(() => {
             className="link-input"
           />
 
+          {/* Warning for YouTube Video */}
+          {selectedType === "Youtube Video" && (
+            <div
+              className="document-warning"
+              style={{
+                color: "#d97706",
+                fontSize: "13px",
+                marginTop: "8px",
+                marginBottom: "8px",
+                fontStyle: "italic",
+              }}
+            >
+              ⚠️ Note: Use videos under 5 minutes for best results. YouTube may rate limit. Status code: 429 indicates a rate limit from YouTube.
+            </div>
+          )}
+
           {/* Warning for Google Docs/Sheets */}
           {(selectedType === "Google Docs" ||
             selectedType === "Google Sheets") && (
