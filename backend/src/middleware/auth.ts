@@ -6,6 +6,7 @@ declare global {
     interface Request {
       user?: {
         userId: string;
+        role: string;
       };
     }
   }
@@ -14,6 +15,7 @@ declare global {
 //interface JWT payload
 interface JWTPayload {
   userId: string;
+  role: string;
 }
 
 //auth middleware function
@@ -43,7 +45,7 @@ export const auth = (
     ) as JWTPayload;
 
     //attahc the user info to the request opbejct
-    req.user = { userId: decoded.userId };
+    req.user = { userId: decoded.userId, role: decoded.role };
 
     next();
   } catch (error) {

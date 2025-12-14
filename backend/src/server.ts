@@ -10,6 +10,8 @@ import youtubeRoutes from "./routes/youtubeRoutes";
 import googleDocsRoutes from "./routes/googleDocsRoutes";
 import notionRoutes from "./routes/notionRoutes";
 import chatHistoryRoutes from "./routes/chatHistoryRoutes";
+import adminRoutes from "./routes/adminRoutes";
+
 
 const app: Application = express();
 
@@ -28,6 +30,7 @@ app.use("/api/youtube", youtubeRoutes);
 app.use("/api/google", googleDocsRoutes);
 app.use("/api/notion", notionRoutes);
 app.use("/api/chats", chatHistoryRoutes);
+app.use("/api/admin", adminRoutes);
 
 
 app.get("/", (req, res) => {

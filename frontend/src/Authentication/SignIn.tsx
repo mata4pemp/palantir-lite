@@ -24,16 +24,17 @@ const SignIn: React.FC = () => {
         setLoading(true);
 
         try {
-            const response = await axios.post(
-                `${process.env.REACT_APP_API_URL}/api/auth/signin`,
-                formData
-            );
+          const response = await axios.post(
+            `${process.env.REACT_APP_API_URL}/api/auth/signin`,
+            formData
+          );
 
-            //save the token
-            localStorage.setItem('token', response.data.token);
+          //save the token and role
+          localStorage.setItem("token", response.data.token);
+          localStorage.setItem("role", response.data.user.role);
 
-            //redirect to newchat
-            navigate('/newchat');
+          //redirect to newchat
+          navigate("/newchat");
         } catch (err: any) {
             setError(err.response?.data?.error || 'Failed to sign in')
         } finally {

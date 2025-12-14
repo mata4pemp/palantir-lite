@@ -14,6 +14,8 @@ import Billing from "./BillingPage/Billing";
 import Feedback from "./Feedback/Feedback";
 import Layout from "./Layout/Layout";
 import { UsageProvider } from "./contexts/UsageContext";
+import AdminPanel from "./AdminPanel/AdminPanel";
+
 
 
 //protected route component
@@ -59,6 +61,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
+
             <Route
               path="/billing"
               element={
@@ -75,6 +78,16 @@ function App() {
                 <ProtectedRoute>
                   <Layout>
                     <Feedback />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <AdminPanel />
                   </Layout>
                 </ProtectedRoute>
               }

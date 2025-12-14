@@ -32,7 +32,7 @@ const SignUp: React.FC = () => {
       );
 
       localStorage.setItem("token", response.data.token);
-
+      localStorage.setItem("role", response.data.user.role);
       navigate("/newchat");
     } catch (err: any) {
       setError(err.response?.data?.error || "Failed to sign up");
@@ -53,7 +53,9 @@ const SignUp: React.FC = () => {
             <input
               type="text"
               value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
               required
             />
           </div>
@@ -63,7 +65,9 @@ const SignUp: React.FC = () => {
             <input
               type="email"
               value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
               required
             />
           </div>
@@ -73,7 +77,9 @@ const SignUp: React.FC = () => {
             <input
               type="password"
               value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
               required
               minLength={6}
             />

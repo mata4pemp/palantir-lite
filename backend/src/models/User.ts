@@ -7,6 +7,7 @@ export interface IUser extends Document {
   name: string;
   email: string;
   password: string;
+  role: 'user' | 'admin';
   createdAt: Date;
   //compare the pw typed to the pw in DB
   comparePassword(candidatePassword: string): Promise<boolean>;
@@ -29,6 +30,11 @@ const userSchema = new Schema<IUser>({
     type: String,
     required: [true, "Password required"],
     minlength: [6, "Password min 6 characters"],
+  },
+  role: {
+    type: String,
+    enum: ['user', 'admin'],
+    default: 'user',
   },
   createdAt: {
     type: Date,

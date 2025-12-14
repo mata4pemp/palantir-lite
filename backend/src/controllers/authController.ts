@@ -18,11 +18,12 @@ interface SigninRequestBody {
 //interface for JWT payload
 interface JWTPayload {
   userId: string;
+  role: string;
 }
 
 //function to generate JWT token
-const generateToken = (userId: string): string => {
-  return jwt.sign({ userId } as JWTPayload, process.env.JWT_SECRET as string, {
+const generateToken = (userId: string, role: string): string => {
+  return jwt.sign({ userId, role } as JWTPayload, process.env.JWT_SECRET as string, {
     expiresIn: "30d",
   });
 };
@@ -63,7 +64,7 @@ export const signup = async (
     });
 
     //generate jwt token
-    const token = generateToken(user._id.toString());
+    const token = generateToken(user._id.toString(), user.role);
 
     //success signup
     return res.status(201).json({
@@ -73,6 +74,7 @@ export const signup = async (
         id: user._id.toString(),
         name: user.name,
         email: user.email,
+        role: user.role,
         createdAt: user.createdAt,
       },
     });
@@ -117,7 +119,7 @@ export const signin = async(
         }
 
         //generate JWT token
-        const token = generateToken(user._id.toString());
+        const token = generateToken(user._id.toString(), user.role);
 
         return res.json({
             message: 'Signed in successfully',
@@ -126,6 +128,7 @@ export const signin = async(
                 id: user._id.toString(),
                 name: user.name,
                 email: user.email,
+                role: user.role,
                 createdAt: user.createdAt
             }
         })
@@ -162,6 +165,7 @@ export const getCurrentUser = async(
                 id:user._id.toString(),
                 name: user.name,
                 email: user.email,
+                role: user.role,
                 createdAt: user.createdAt
             }
         });
