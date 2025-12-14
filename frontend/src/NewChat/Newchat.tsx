@@ -13,6 +13,11 @@ function NewChat() {
 
   const [selectedType, setSelectedType] = useState<string>("Youtube Video");
   const [link, setLink] = useState<string>("");
+  const [uploadedPDF, setUploadedPDF] = useState<{
+    content: string;
+    title: string;
+  } | null>(null);
+
   const [addedLinks, setAddedLinks] = useState<
     Array<{ type: string; url: string; title?: string }>
   >([]);
@@ -101,7 +106,85 @@ const [transcriptionStatus, setTranscriptionStatus] = useState<string>("");
     }
   };
 
+const handlePDFUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  try {
+    setIsLoading(true);
+    setTranscriptionStatus("Processing PDF...");
+
+    const formData = new FormData();
+    formData.append("pdf", file);
+
+    const response = await axios.post(
+      `${process.env.REACT_APP_API_URL}/api/pdf/upload`,
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    setUploadedPDF({
+      content: response.data.content,
+      title: response.data.title,
+    });
+
+    setTranscriptionStatus("✅ PDF processed successfully!");
+    setTimeout(() => setTranscriptionStatus(""), 3000);
+    setIsLoading(false);
+  } catch (error: any) {
+    console.error("Error uploading PDF:", error);
+    setIsLoading(false);
+    setTranscriptionStatus("");
+    alert(error.response?.data?.error || "Failed to process PDF");
+  }
+};
+
   const handleAdd = async () => {
+    // Handle PDF documents differently (they use file upload, not URL)
+    if (selectedType === "PDF") {
+      if (!uploadedPDF) {
+        setLinkError("Please upload a PDF file first");
+        return;
+      }
+
+      const newLinks = [
+        ...addedLinks,
+        {
+          type: selectedType,
+          url: `pdf://${uploadedPDF.title}`, // Create a pseudo-URL for storage
+          title: uploadedPDF.title,
+          content: uploadedPDF.content, // Store PDF content
+        } as any,
+      ];
+      setAddedLinks(newLinks);
+      setUploadedPDF(null); // Clear uploaded PDF after adding
+      setLinkError("");
+
+      // Update database if chat exists
+      if (currentChatId) {
+        try {
+          await axios.put(
+            `${process.env.REACT_APP_API_URL}/api/chats/${currentChatId}`,
+            { documents: newLinks },
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }
+          );
+        } catch (error) {
+          console.error("Error updating chat documents:", error);
+        }
+      }
+      return;
+    }
+
+    // For URL-based documents, validate the URL
     if (!link.trim()) {
       setLinkError("Please enter a URL");
       return;
@@ -469,20 +552,34 @@ useEffect(() => {
             <option value="Google Docs">Google Docs</option>
             <option value="Google Sheets">Google Sheets</option>
             <option value="Notion Page">Notion Page</option>
+            <option value="PDF">PDF Document</option>
             <option value="Custom Text">Custom Text</option>
           </select>
 
-          {/* Input your link */}
-          <input
-            type="url"
-            placeholder="Place your link here"
-            value={link}
-            onChange={(e) => {
-              setLink(e.target.value);
-              setLinkError("");
-            }}
-            className="link-input"
-          />
+          {/* Input for URL-based documents */}
+          {selectedType !== "PDF" && selectedType !== "Custom Text" && (
+            <input
+              type="url"
+              placeholder="Place your link here"
+              value={link}
+              onChange={(e) => {
+                setLink(e.target.value);
+                setLinkError("");
+              }}
+              className="link-input"
+            />
+          )}
+
+          {/* Input for PDF upload */}
+          {selectedType === "PDF" && (
+            <input
+              type="file"
+              accept=".pdf"
+              onChange={handlePDFUpload}
+              className="link-input"
+              style={{ padding: '0.75rem' }}
+            />
+          )}
 
           {/* Warning for YouTube Video */}
           {selectedType === "Youtube Video" && (
@@ -496,7 +593,8 @@ useEffect(() => {
                 fontStyle: "italic",
               }}
             >
-              ⚠️ Note: Use videos under 5 minutes for best results. YouTube may rate limit. Status code: 429 indicates a rate limit from YouTube.
+              ⚠️ Note: Use videos under 5 minutes for best results. YouTube may
+              rate limit. Status code: 429 indicates a rate limit from YouTube.
             </div>
           )}
 
@@ -550,19 +648,17 @@ useEffect(() => {
           )}
 
           {/* Add Button */}
-          <button 
-  onClick={handleAdd} 
-  className="add-button"
-  disabled={isLoading}
->
-  {isLoading ? "Processing..." : "Add"}
-</button>
+          <button
+            onClick={handleAdd}
+            className="add-button"
+            disabled={isLoading}
+          >
+            {isLoading ? "Processing..." : "Add"}
+          </button>
 
           {/* Transcription Status Message */}
           {transcriptionStatus && (
-            <div className="transcription-status">
-              {transcriptionStatus}
-            </div>
+            <div className="transcription-status">{transcriptionStatus}</div>
           )}
         </div>
 
@@ -588,11 +684,23 @@ useEffect(() => {
                           {item.url}
                         </a>
                         {item.title && (
-                          <div style={{ marginTop: "0.5rem", fontSize: "0.9rem", color: "#666" }}>
-                            {item.type === "Youtube Video" && `Video Name: ${item.title}`}
-                            {item.type === "Google Docs" && `Document Name: ${item.title}`}
-                            {item.type === "Google Sheets" && `Sheet Name: ${item.title}`}
-                            {item.type === "Notion Page" && `Page Name: ${item.title}`}
+                          <div
+                            style={{
+                              marginTop: "0.5rem",
+                              fontSize: "0.9rem",
+                              color: "#666",
+                            }}
+                          >
+                            {item.type === "Youtube Video" &&
+                              `Video Name: ${item.title}`}
+                            {item.type === "Google Docs" &&
+                              `Document Name: ${item.title}`}
+                            {item.type === "Google Sheets" &&
+                              `Sheet Name: ${item.title}`}
+                            {item.type === "Notion Page" &&
+                              `Page Name: ${item.title}`}
+                            {item.type === "PDF" &&
+                              `PDF Name: ${item.title}`}
                           </div>
                         )}
                       </>
@@ -726,8 +834,12 @@ useEffect(() => {
                 <div className="message-content">{message.content}</div>
                 <button
                   onClick={() => handleCopyMessage(message.content, index)}
-                  className={`copy-button ${copiedMessageIndex === index ? "copied" : ""}`}
-                  title={copiedMessageIndex === index ? "Copied!" : "Copy message"}
+                  className={`copy-button ${
+                    copiedMessageIndex === index ? "copied" : ""
+                  }`}
+                  title={
+                    copiedMessageIndex === index ? "Copied!" : "Copy message"
+                  }
                 >
                   {copiedMessageIndex === index ? (
                     <svg
@@ -755,7 +867,14 @@ useEffect(() => {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     >
-                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <rect
+                        x="9"
+                        y="9"
+                        width="13"
+                        height="13"
+                        rx="2"
+                        ry="2"
+                      ></rect>
                       <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                     </svg>
                   )}
@@ -773,7 +892,17 @@ useEffect(() => {
         {/* AI Model Badge */}
         <div className="ai-model-badge-container">
           <div className="ai-model-badge">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
               <circle cx="12" cy="12" r="10"></circle>
               <path d="M12 16v-4"></path>
               <path d="M12 8h.01"></path>

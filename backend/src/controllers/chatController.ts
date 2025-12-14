@@ -115,6 +115,18 @@ export const sendChatMessage = async (
           }
         }
 
+        if (doc.type === "PDF") {
+          // PDF content is already stored in the document object
+          const pdfContent = (doc as any).content;
+          const pdfTitle = doc.title || "PDF Document";
+          if (pdfContent) {
+            console.log(
+              `✅ Using stored PDF content: "${pdfTitle}" (${pdfContent.length} characters)`
+            );
+            systemMessage += `\n\n--- Content from PDF "${pdfTitle}" ---\n${pdfContent}\n--- End of PDF ---\n`;
+          }
+        }
+
         if (doc.type === "Notion Page") {
           const pageId = extractNotionPageId(doc.url);
           if (pageId) {

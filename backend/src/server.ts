@@ -11,6 +11,8 @@ import googleDocsRoutes from "./routes/googleDocsRoutes";
 import notionRoutes from "./routes/notionRoutes";
 import chatHistoryRoutes from "./routes/chatHistoryRoutes";
 import adminRoutes from "./routes/adminRoutes";
+import pdfRoutes from "./routes/pdfRoutes";
+
 
 
 const app: Application = express();
@@ -31,6 +33,7 @@ app.use("/api/google", googleDocsRoutes);
 app.use("/api/notion", notionRoutes);
 app.use("/api/chats", chatHistoryRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/pdf", pdfRoutes);
 
 
 app.get("/", (req, res) => {
