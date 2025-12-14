@@ -51,7 +51,7 @@ export const sendChatMessage = async (
 
     //sets the AI behavior so they understand
     let systemMessage =
-      "You are a helpful assistant that helps users chat about their documents. They will give you access to their document data and you will help them answer any questions or request.";
+      "You are a helpful assistant that helps users chat about their documents. They will give you access to their document data and you will help them answer any questions or request.\n\nIMPORTANT FORMATTING RULES:\n- Use line breaks (\\n) to separate different ideas, sections, or list items\n- When listing items, put each item on a new line\n- Add blank lines between paragraphs for better readability\n- Use numbered lists (1., 2., 3.) or bullet points when appropriate\n- Break up long paragraphs into smaller, digestible chunks\n- Your response should be well-formatted and easy to read";
 
     //when documents exist, create a comma separateed list of documents add it to system message
     if (documents && documents.length > 0) {
