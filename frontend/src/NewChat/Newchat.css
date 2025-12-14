@@ -45,14 +45,15 @@
   padding: 0.5rem 1rem;
   border-radius: 4px;
   border: none;
-  background-color: #667eea;
+  background-color: #000000;
   color: white;
   cursor: pointer;
   width: fit-content;
+  transition: all 0.2s;
 }
 
 .add-button:hover {
-  background-color: #5568d3;
+  background-color: #27272a;
 }
 
 /* Added documents section */
@@ -282,7 +283,7 @@
   padding: 0.75rem;
   border-radius: 8px;
   border: none;
-  background-color: #667eea;
+  background-color: #000000;
   color: white;
   cursor: pointer;
   font-weight: 500;
@@ -292,10 +293,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.2s;
 }
 
 .send-button:hover {
-  background-color: #5568d3;
+  background-color: #27272a;
 }
 
 .send-button:disabled {
