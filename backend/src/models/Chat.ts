@@ -12,6 +12,7 @@ export interface IChat extends Document {
   documents: Array<{
     type: string;
     url: string;
+    title?: string;
   }>;
   isPinned: boolean;
   createdAt: Date;
@@ -56,6 +57,10 @@ const ChatSchema = new Schema<IChat>(
         url: {
           type: String,
           required: true,
+        },
+        title: {
+          type: String,
+          required: false,
         },
       },
     ],
