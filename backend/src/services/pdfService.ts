@@ -1,9 +1,9 @@
-const pdf = require("pdf-parse");
-
 export const extractTextFromPDF = async (
   buffer: Buffer
 ): Promise<{ content: string; title: string }> => {
   try {
+    // Dynamic import to handle CommonJS module
+    const pdf = require("pdf-parse") as (buffer: Buffer) => Promise<any>;
     const data = await pdf(buffer);
 
     // Extract text content
