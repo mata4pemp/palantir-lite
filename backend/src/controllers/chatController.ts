@@ -101,13 +101,17 @@ export const sendChatMessage = async (
           if (sheetId) {
             try {
               const { content, title } = await downloadGoogleSheet(sheetId);
+              console.log(`✅ Successfully fetched Google Sheet: "${title}" (${content.length} characters)`);
               systemMessage += `\n\n--- Content from Google Sheet "${title}" (${doc.url}) ---\n${content}\n--- End of Google Sheet ---\n`;
             } catch (error: any) {
-              console.error("Error fetching Google Sheet:", error);
+              console.error("❌ Error fetching Google Sheet:", error);
               console.error("Sheet ID:", sheetId);
               console.error("Full error:", error.message);
-              // Don't fail the entire request, just skip this sheet
+              // Add error message to system message so user knows
+              systemMessage += `\n\n[Note: Could not load Google Sheet from ${doc.url}. Error: ${error.message}]\n`;
             }
+          } else {
+            console.error("❌ Could not extract Sheet ID from:", doc.url);
           }
         }
 
@@ -125,6 +129,10 @@ export const sendChatMessage = async (
       }
     }
 
+    // Log system message length for debugging
+    console.log(`System message length: ${systemMessage.length} characters`);
+    console.log(`Number of documents: ${documents?.length || 0}`);
+
     //create the completion with OpenAI
     //if i increase token limit, helps to increase output more
     //temperature change helps change deterministic > creativity of model
@@ -137,6 +145,13 @@ export const sendChatMessage = async (
 
     //get the AI's 1st response message
     const aiMessage = completion.choices[0].message;
+
+    // Log response for debugging
+    console.log(`AI response length: ${aiMessage.content?.length || 0} characters`);
+    if (!aiMessage.content || aiMessage.content.trim().length === 0) {
+      console.error('WARNING: Empty response from OpenAI');
+      console.error('System message preview:', systemMessage.substring(0, 500));
+    }
 
     //sends back the AI message and usage stats token to frontend
     return res.json({
