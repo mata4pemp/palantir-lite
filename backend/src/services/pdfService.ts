@@ -1,10 +1,12 @@
-import * as pdfParse from "pdf-parse";
+import * as pdfParseModule from "pdf-parse";
 
 export const extractTextFromPDF = async (
   buffer: Buffer
 ): Promise<{ content: string; title: string }> => {
   try {
-    const data = await (pdfParse as any)(buffer);
+    // Access the default export from the CommonJS module
+    const pdfParse = (pdfParseModule as any).default || pdfParseModule;
+    const data = await pdfParse(buffer);
 
     // Extract text content
     const content = data.text;
