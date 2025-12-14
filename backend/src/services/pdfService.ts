@@ -1,4 +1,4 @@
-import pdf from "pdf-parse";
+const pdf = require("pdf-parse");
 
 export const extractTextFromPDF = async (
   buffer: Buffer

@@ -23,6 +23,8 @@ interface ChatMessage {
 interface Document {
   type: string;
   url: string;
+  title?: string;
+  content?: string;
 }
 
 //defines what the request body should contain, sent from frontend to http request
