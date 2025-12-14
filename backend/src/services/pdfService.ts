@@ -1,22 +1,39 @@
+import * as pdfjsLib from "pdfjs-dist";
+
+// Disable worker to avoid build issues
+pdfjsLib.GlobalWorkerOptions.workerSrc = "";
+
 export const extractTextFromPDF = async (
   buffer: Buffer
 ): Promise<{ content: string; title: string }> => {
   try {
-    // Load pdf-parse at runtime to avoid TypeScript compilation issues
-    const pdfParse = eval('require')('pdf-parse');
-    const data = await pdfParse(buffer);
+    // Convert Buffer to Uint8Array
+    const uint8Array = new Uint8Array(buffer);
 
-    // Extract text content
-    const content = data.text;
+    // Load the PDF document
+    const loadingTask = pdfjsLib.getDocument({ data: uint8Array });
+    const pdfDocument = await loadingTask.promise;
 
-    // Try to get title from PDF metadata, fallback to "Untitled Document"
-    const title = data.info?.Title || "Untitled PDF Document";
+    // Extract metadata for title
+    const metadata = await pdfDocument.getMetadata();
+    const title = (metadata.info as any)?.Title || "Untitled PDF Document";
 
-    if (!content || content.trim().length === 0) {
+    // Extract text from all pages
+    let fullText = "";
+    for (let i = 1; i <= pdfDocument.numPages; i++) {
+      const page = await pdfDocument.getPage(i);
+      const textContent = await page.getTextContent();
+      const pageText = textContent.items
+        .map((item: any) => item.str)
+        .join(" ");
+      fullText += pageText + "\n";
+    }
+
+    if (!fullText || fullText.trim().length === 0) {
       throw new Error("PDF appears to be empty or contains only images");
     }
 
-    return { content, title };
+    return { content: fullText.trim(), title };
   } catch (error: any) {
     console.error("Error extracting PDF text:", error);
     throw new Error(
