@@ -72,8 +72,6 @@ Design System:
 
 Attributions
 
-OpenAI. (2024). ChatGPT (GPT-3.5-turbo) [Large language model]. https://openai.com/chatgpt
-
 OpenAI. (2024). Whisper API [Audio transcription model]. https://platform.openai.com/docs/guides/speech-to-text
 
 Google LLC. (2024). Google Docs API [Web service]. https://developers.google.com/docs/api
@@ -83,8 +81,6 @@ Google LLC. (2024). Google Sheets API [Web service]. https://developers.google.c
 Notion Labs, Inc. (2024). Notion API [Web service]. https://developers.notion.com/
 
 shadcn. (2024). shadcn/ui [UI component library]. https://ui.shadcn.com/
-
-This project was developed with assistance from AI tools including Claude (Anthropic) and ChatGPT (OpenAI) for code generation, debugging, and documentation.
 
 --------------
 
