@@ -45,11 +45,11 @@ const Sidebar: React.FC<SidebarProps> = ({ onNewChat }) => {
     } else {
       document.body.classList.remove("dark-mode");
     }
-  }, []);
+  }, [darkMode]);
 
   const fetchChats = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/chats", {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/chats`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
