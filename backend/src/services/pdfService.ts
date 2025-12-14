@@ -1,11 +1,9 @@
-import * as pdfParseModule from "pdf-parse";
-
 export const extractTextFromPDF = async (
   buffer: Buffer
 ): Promise<{ content: string; title: string }> => {
   try {
-    // Access the default export from the CommonJS module
-    const pdfParse = (pdfParseModule as any).default || pdfParseModule;
+    // Load pdf-parse at runtime to avoid TypeScript compilation issues
+    const pdfParse = eval('require')('pdf-parse');
     const data = await pdfParse(buffer);
 
     // Extract text content
