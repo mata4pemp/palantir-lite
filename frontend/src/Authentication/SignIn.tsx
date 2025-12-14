@@ -32,8 +32,8 @@ const SignIn: React.FC = () => {
             //save the token
             localStorage.setItem('token', response.data.token);
 
-            //redirect to homepage
-            navigate('/homepage');
+            //redirect to newchat
+            navigate('/newchat');
         } catch (err: any) {
             setError(err.response?.data?.error || 'Failed to sign in')
         } finally {

@@ -33,7 +33,7 @@ const SignUp: React.FC = () => {
 
       localStorage.setItem("token", response.data.token);
 
-      navigate("/homepage");
+      navigate("/newchat");
     } catch (err: any) {
       setError(err.response?.data?.error || "Failed to sign up");
     } finally {
