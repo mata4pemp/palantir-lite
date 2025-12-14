@@ -133,6 +133,21 @@ export const sendChatMessage = async (
     console.log(`System message length: ${systemMessage.length} characters`);
     console.log(`Number of documents: ${documents?.length || 0}`);
 
+    // Estimate token count (rough approximation: 1 token ≈ 4 characters)
+    const estimatedTokens = Math.ceil(systemMessage.length / 4) + messages.reduce((sum, msg) => sum + Math.ceil(msg.content.length / 4), 0);
+    console.log(`Estimated input tokens: ${estimatedTokens}`);
+
+    // GPT-3.5-turbo has 4096 token limit total (input + output)
+    // Leave room for output by limiting input
+    if (estimatedTokens > 3000) {
+      console.warn(`⚠️ Input may be too large (${estimatedTokens} tokens). Truncating system message...`);
+      // Truncate system message to fit within limits
+      const maxSystemChars = 10000; // ~2500 tokens
+      if (systemMessage.length > maxSystemChars) {
+        systemMessage = systemMessage.substring(0, maxSystemChars) + "\n\n[Content truncated to fit token limits]";
+      }
+    }
+
     //create the completion with OpenAI
     //if i increase token limit, helps to increase output more
     //temperature change helps change deterministic > creativity of model
@@ -140,7 +155,7 @@ export const sendChatMessage = async (
       model: "gpt-3.5-turbo",
       messages: [{ role: "system", content: systemMessage }, ...messages],
       temperature: 0.7,
-      max_tokens: 1000,
+      max_tokens: 500, // Reduced from 1000 to leave more room for input
     });
 
     //get the AI's 1st response message
