@@ -1,8 +1,10 @@
 // Use require for the legacy CommonJS build to avoid DOMMatrix error
 const pdfjsLib = require("pdfjs-dist/legacy/build/pdf.mjs");
 
-// Disable worker to avoid build issues
-pdfjsLib.GlobalWorkerOptions.workerSrc = "";
+// Set the worker source to the legacy worker file
+pdfjsLib.GlobalWorkerOptions.workerSrc = require.resolve(
+  "pdfjs-dist/legacy/build/pdf.worker.mjs"
+);
 
 export const extractTextFromPDF = async (
   buffer: Buffer
