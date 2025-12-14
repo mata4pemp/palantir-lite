@@ -1,11 +1,10 @@
-// Import pdf-parse using require for CommonJS compatibility
-const pdfParse = require("pdf-parse");
+import * as pdfParse from "pdf-parse";
 
 export const extractTextFromPDF = async (
   buffer: Buffer
 ): Promise<{ content: string; title: string }> => {
   try {
-    const data = await pdfParse(buffer);
+    const data = await (pdfParse as any)(buffer);
 
     // Extract text content
     const content = data.text;
