@@ -48,8 +48,15 @@ export const downloadNotionPage = async (pageUrl: string): Promise<{ content: st
       // Could not extract title from URL, will try HTML
     }
 
+    // Convert notion.so URLs to notion.site URLs (better for scraping)
+    let scrapingUrl = pageUrl;
+    if (pageUrl.includes('notion.so')) {
+      // Try to convert to the public share domain
+      scrapingUrl = pageUrl.replace('www.notion.so', 'notion.site');
+    }
+
     //fetch the HTML from notion page
-    const response = await axios.get(pageUrl, {
+    const response = await axios.get(scrapingUrl, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
@@ -62,8 +69,11 @@ export const downloadNotionPage = async (pageUrl: string): Promise<{ content: st
         'Sec-Fetch-Mode': 'navigate',
         'Sec-Fetch-Site': 'none',
         'Cache-Control': 'max-age=0',
+        'Referer': 'https://www.google.com/',
       },
-      timeout: 15000, // 15 second timeout
+      timeout: 20000, // 20 second timeout
+      maxRedirects: 5,
+      validateStatus: (status) => status < 500, // Accept redirects and client errors
     });
 
     //parse HTML with cheerio

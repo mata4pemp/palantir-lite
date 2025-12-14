@@ -104,6 +104,9 @@ export const sendChatMessage = async (
               systemMessage += `\n\n--- Content from Google Sheet "${title}" (${doc.url}) ---\n${content}\n--- End of Google Sheet ---\n`;
             } catch (error: any) {
               console.error("Error fetching Google Sheet:", error);
+              console.error("Sheet ID:", sheetId);
+              console.error("Full error:", error.message);
+              // Don't fail the entire request, just skip this sheet
             }
           }
         }

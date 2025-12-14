@@ -118,12 +118,28 @@ export const downloadGoogleSheet = async (
       }
     }
 
-    // Get the CSV content
-    const exportUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv`;
+    // Get the CSV content - export first sheet only (gid=0)
+    const exportUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=0`;
     const response = await axios.get(exportUrl, {
       responseType: "text",
       headers,
+      timeout: 30000, // 30 second timeout
+      maxRedirects: 5,
     });
+
+    // Validate that we got actual CSV content
+    if (!response.data || typeof response.data !== 'string') {
+      throw new Error('Invalid response from Google Sheets export');
+    }
+
+    // Check if response is too large (over 100KB of CSV data)
+    if (response.data.length > 100000) {
+      console.warn(`Large Google Sheet (${response.data.length} chars), truncating...`);
+      return {
+        content: response.data.substring(0, 100000) + '\n\n[Content truncated due to size]',
+        title
+      };
+    }
 
     return { content: response.data, title };
   } catch (error: any) {
