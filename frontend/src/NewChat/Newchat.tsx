@@ -77,7 +77,7 @@ const [transcriptionStatus, setTranscriptionStatus] = useState<string>("");
 
       try {
         const response = await axios.post(
-          `${process.env.REACT_APP_API_URL}/api/chat",
+          `${process.env.REACT_APP_API_URL}/api/chat`,
           {
             messages: [...chatMessages, userMessage],
             documents: addedLinks,
@@ -125,7 +125,7 @@ if (selectedType === "Youtube Video") {
     );
 
     const response = await axios.post(
-      `${process.env.REACT_APP_API_URL}/api/youtube/process",
+      `${process.env.REACT_APP_API_URL}/api/youtube/process`,
       { videoUrl: link },
       {
         headers: {
@@ -198,7 +198,7 @@ if (selectedType === "Notion Page") {
     setTranscriptionStatus("Fetching Notion page information...");
 
     const response = await axios.post(
-      `${process.env.REACT_APP_API_URL}/api/notion/page/title",
+      `${process.env.REACT_APP_API_URL}/api/notion/page/title`,
       { pageUrl: link },
       {
         headers: {
@@ -277,7 +277,7 @@ if (selectedType === "Notion Page") {
   const createNewChat = async () => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/chats",
+        `${process.env.REACT_APP_API_URL}/api/chats`,
         {
           name: chatName,
           documents: addedLinks,
