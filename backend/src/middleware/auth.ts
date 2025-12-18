@@ -1,3 +1,5 @@
+//this runs BEFORE every proteccted API endpoint 
+
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
@@ -38,7 +40,7 @@ export const auth = (
       return res.status(401).json({ error: "No token provided!" });
     }
 
-    //verify token
+    //verify token is valid 
     const decoded = jwt.verify(
       token,
       process.env.JWT_SECRET as string
@@ -47,6 +49,7 @@ export const auth = (
     //attahc the user info to the request opbejct
     req.user = { userId: decoded.userId, role: decoded.role };
 
+    //continue to next middlewar controller
     next();
   } catch (error) {
     console.error("auth moddlewar error", error);

@@ -55,6 +55,7 @@ const [transcriptionStatus, setTranscriptionStatus] = useState<string>("");
     }
   };
 
+  //when user sends messages
   const handleSendMessage = async () => {
     if (chatInput.trim()) {
       //check if usage limit reached
@@ -62,7 +63,9 @@ const [transcriptionStatus, setTranscriptionStatus] = useState<string>("");
         alert("You have reached your chat limit! Please upgrade your plan");
         return;
       }
+      //create user message object 
       const userMessage = { role: "user", content: chatInput };
+      //add the messages to the frontend UI
       setChatMessages([...chatMessages, userMessage]);
       setChatInput("");
       addChat(); // Track the chat usage
@@ -81,11 +84,12 @@ const [transcriptionStatus, setTranscriptionStatus] = useState<string>("");
       await addMessageToChat("user", chatInput);
 
       try {
+        //send to backend
         const response = await axios.post(
           `${process.env.REACT_APP_API_URL}/api/chat`,
           {
-            messages: [...chatMessages, userMessage],
-            documents: addedLinks,
+            messages: [...chatMessages, userMessage], //all convo
+            documents: addedLinks, // all documents
           },
           {
             headers: {
@@ -106,6 +110,7 @@ const [transcriptionStatus, setTranscriptionStatus] = useState<string>("");
     }
   };
 
+  //Uploading PDFs
 const handlePDFUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
   const file = e.target.files?.[0];
   if (!file) return;
@@ -143,6 +148,7 @@ const handlePDFUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
   }
 };
 
+//ADDING documents to added documents section
   const handleAdd = async () => {
     // Handle PDF documents differently (they use file upload, not URL)
     if (selectedType === "PDF") {
@@ -306,6 +312,7 @@ if (selectedType === "Notion Page") {
   }
 }
 
+//create a new array with all old documents + this new one
     const newLinks = [
       ...addedLinks,
       {

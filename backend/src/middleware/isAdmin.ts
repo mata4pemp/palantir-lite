@@ -1,3 +1,4 @@
+//checks if user is an admin (runs after auth middleware)
 import { Request, Response, NextFunction } from "express";
 
 export const isAdmin = (

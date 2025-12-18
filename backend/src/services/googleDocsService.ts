@@ -1,3 +1,4 @@
+//Downloads google docs and sheets as plain text / CSV
 import axios from "axios";
 
 //extract google doc ID from URL
@@ -40,6 +41,7 @@ export const downloadGoogleDoc = async (
       "Upgrade-Insecure-Requests": "1",
     };
 
+    //Get title from HTML page
     // Fetch the regular document page to extract the title
     const viewUrl = `https://docs.google.com/document/d/${docId}/edit`;
     const viewResponse = await axios.get(viewUrl, {
@@ -118,7 +120,7 @@ export const downloadGoogleSheet = async (
       }
     }
 
-    // Get the CSV content - export first sheet only (gid=0)
+    // Get the CSV content - export first sheet only 
     const exportUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=0`;
     const response = await axios.get(exportUrl, {
       responseType: "text",

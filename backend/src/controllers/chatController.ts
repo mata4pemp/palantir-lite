@@ -43,6 +43,7 @@ export const sendChatMessage = async (
   res: Response
 ): Promise<Response> => {
   try {
+    //receives users messages and documents from frontend
     const { messages, documents } = req.body;
 
     if (!messages || !Array.isArray(messages)) {
@@ -51,11 +52,11 @@ export const sendChatMessage = async (
       });
     }
 
-    //sets the AI behavior so they understand
+    //sets the AI behavior so they understand, instruction message for ChatGPT
     let systemMessage =
       "You are a helpful assistant that helps users chat about their documents. They will give you access to their document data and you will help them answer any questions or request.\n\nIMPORTANT FORMATTING RULES:\n- Use line breaks (\\n) to separate different ideas, sections, or list items\n- When listing items, put each item on a new line\n- Add blank lines between paragraphs for better readability\n- Use numbered lists (1., 2., 3.) or bullet points when appropriate\n- Break up long paragraphs into smaller, digestible chunks\n- Your response should be well-formatted and easy to read";
 
-    //when documents exist, create a comma separateed list of documents add it to system message
+    //loop through each document and add its content, when documents exist, create a comma separateed list of documents add it to system message
     if (documents && documents.length > 0) {
       const docsList = documents.map((d) => `${d.type}: ${d.url}`).join(", ");
       systemMessage += ` You are currently chatting about these documents: ${docsList}`;
@@ -84,7 +85,8 @@ export const sendChatMessage = async (
           youtubeTranscripts.join("\n");
       }
 
-      //fetch the google docs content
+      //for each document, add its content
+      //Google doc: Download and extract text from document, fetch the google docs content
       for (const doc of documents) {
         if (doc.type === "Google Docs") {
           const docId = extractGoogleDocId(doc.url);
@@ -98,6 +100,7 @@ export const sendChatMessage = async (
           }
         }
 
+        //google sheets: download csv
         if (doc.type === "Google Sheets") {
           const sheetId = extractGoogleSheetId(doc.url);
           if (sheetId) {
@@ -162,6 +165,7 @@ export const sendChatMessage = async (
       }
     }
 
+    //send everything to openAI and return response
     //create the completion with OpenAI
     //if i increase token limit, helps to increase output more
     //temperature change helps change deterministic > creativity of model

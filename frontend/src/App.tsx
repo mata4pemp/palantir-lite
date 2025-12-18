@@ -24,6 +24,7 @@ interface ProtectedRouteProps {
   children: React.ReactElement;
 }
 
+//sets up routes and protects pages that needs login
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const token = localStorage.getItem("token");
   return token ? children : <Navigate to="/signin" replace />;

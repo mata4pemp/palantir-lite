@@ -1,3 +1,5 @@
+//use Mozilla's pdfjs-dist library to read PDFs
+
 // Use require for the legacy CommonJS build to avoid DOMMatrix error
 const pdfjsLib = require("pdfjs-dist/legacy/build/pdf.mjs");
 
@@ -10,7 +12,7 @@ export const extractTextFromPDF = async (
   buffer: Buffer
 ): Promise<{ content: string; title: string }> => {
   try {
-    // Convert Buffer to Uint8Array
+    // Convert Buffer to Uint8Array, load PDF from binary data
     const uint8Array = new Uint8Array(buffer);
 
     // Load the PDF document
@@ -21,7 +23,7 @@ export const extractTextFromPDF = async (
     const metadata = await pdfDocument.getMetadata();
     const title = (metadata.info as any)?.Title || "Untitled PDF Document";
 
-    // Extract text from all pages
+    // loop through all the pages and Extract text from all pages
     let fullText = "";
     for (let i = 1; i <= pdfDocument.numPages; i++) {
       const page = await pdfDocument.getPage(i);
@@ -36,6 +38,7 @@ export const extractTextFromPDF = async (
       throw new Error("PDF appears to be empty or contains only images");
     }
 
+    //return text and title 
     return { content: fullText.trim(), title };
   } catch (error: any) {
     console.error("Error extracting PDF text:", error);

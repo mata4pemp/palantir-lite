@@ -1,3 +1,5 @@
+//Downloads youtube videos and transcribes with Whisper
+
 import OpenAI from "openai";
 import ytdl from "@distube/ytdl-core";
 import { exec } from "child_process";
