@@ -2,9 +2,12 @@ Palantir Lite
 
 App Overview
 
-Palantir Lite is a React + Node.js application that allows users to upload documents (PDFs, Google Docs, Google Sheets, Notion pages) and interact with an AI assistant to extract, summarize, and answer questions based on the uploaded content. Users can also transcribe YouTube audio to text using OpenAI’s Whisper API.
+Palantir Lite is a React + Node.js application that allows users to upload documents (PDFs, Google Docs, Google Sheets, Notion pages) and interact with an AI assistant to extract, summarize, and answer questions based on the uploaded content. 
 
 Here's the link to access:
+https://palantir-lite-5l9b2a4aa-jonathans-projects-461e410f.vercel.app/
+
+https://palantir-lite-5l9b2a4aa-jonathans-projects-461e410f.vercel.app/
 
 --------------------
 
@@ -23,11 +26,43 @@ Billing page
 ![Palantir Lite Screenshot](assets/billing.png)
 
 -----------------
-API Endpoints
+Auth Routes (/api/auth)
+POST /signup - Create new user account
+POST /signin - Login and get JWT token
+GET /me - Get current user info (protected)
+POST /signout - Logout user (protected)
 
-Auth Routes
+Chat Routes (/api/chat)
+POST /chat - Send chat message with documents (protected)
 
-API Routes
+YouTube Routes (/api/youtube) - NOT WORKING, WIP
+POST /process - Process and transcribe YouTube video (protected)
+GET /transcript/:videoId - Get existing transcript (protected)
+
+Google Docs Routes (/api/google) 
+GET /doc/:docId - Get Google Doc title (protected)
+GET /sheet/:sheetId - Get Google Sheet title (protected)
+
+Notion Routes (/api/notion) - NOT WORKING, WIP
+POST /page/title - Get Notion page title (protected)
+
+Chat History Routes (/api/chats)
+GET / - Get all user chats (protected)
+GET /:chatId - Get specific chat (protected)
+POST / - Create new chat (protected)
+PUT /:chatId/name - Update chat name (protected)
+PUT /:chatId/pin - Toggle pin chat (protected)
+PUT /:chatId - Update chat documents (protected)
+POST /:chatId/messages - Add message to chat (protected)
+DELETE /:chatId - Delete chat (protected)
+
+PDF Routes (/api/pdf)
+POST /upload - Upload and extract PDF text (protected, multipart/form-data)
+
+Admin Routes (/api/admin)
+GET /users - Get all users (admin only)
+GET /chats - Get all chats (admin only)
+GET /stats - Get system statistics (admin only)
 
 ------------
 Technologies Used
@@ -65,7 +100,7 @@ Additional Libraries:
 - multer 1.4.5-lts.1 - File upload handling
 
 Design System:
-- shadcn/ui - Black and white component design system
+- shadcn/ui - Black and white component design system (WIP)
 - Custom CSS with dark mode support
 
 --------------
