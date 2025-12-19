@@ -106,7 +106,6 @@ export const sendChatMessage = async (
           if (sheetId) {
             try {
               const { content, title } = await downloadGoogleSheet(sheetId);
-              console.log(`✅ Successfully fetched Google Sheet: "${title}" (${content.length} characters)`);
               systemMessage += `\n\n--- Content from Google Sheet "${title}" (${doc.url}) ---\n${content}\n--- End of Google Sheet ---\n`;
             } catch (error: any) {
               console.error("❌ Error fetching Google Sheet:", error);
@@ -125,9 +124,6 @@ export const sendChatMessage = async (
           const pdfContent = (doc as any).content;
           const pdfTitle = doc.title || "PDF Document";
           if (pdfContent) {
-            console.log(
-              `✅ Using stored PDF content: "${pdfTitle}" (${pdfContent.length} characters)`
-            );
             systemMessage += `\n\n--- Content from PDF "${pdfTitle}" ---\n${pdfContent}\n--- End of PDF ---\n`;
           }
         }
@@ -146,13 +142,8 @@ export const sendChatMessage = async (
       }
     }
 
-    // Log system message length for debugging
-    console.log(`System message length: ${systemMessage.length} characters`);
-    console.log(`Number of documents: ${documents?.length || 0}`);
-
     // Estimate token count (rough approximation: 1 token ≈ 4 characters)
     const estimatedTokens = Math.ceil(systemMessage.length / 4) + messages.reduce((sum, msg) => sum + Math.ceil(msg.content.length / 4), 0);
-    console.log(`Estimated input tokens: ${estimatedTokens}`);
 
     // GPT-3.5-turbo has 4096 token limit total (input + output)
     // Leave room for output by limiting input
@@ -179,8 +170,6 @@ export const sendChatMessage = async (
     //get the AI's 1st response message
     const aiMessage = completion.choices[0].message;
 
-    // Log response for debugging
-    console.log(`AI response length: ${aiMessage.content?.length || 0} characters`);
     if (!aiMessage.content || aiMessage.content.trim().length === 0) {
       console.error('WARNING: Empty response from OpenAI');
       console.error('System message preview:', systemMessage.substring(0, 500));
